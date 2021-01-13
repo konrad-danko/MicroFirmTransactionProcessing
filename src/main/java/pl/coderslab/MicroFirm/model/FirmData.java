@@ -16,48 +16,45 @@ public class FirmData {
     private Long id;
 
     @Column(nullable = false)
-    @NotBlank
-    @Size(max = 255)
+    @NotBlank(message = "Pole nie może być puste")
+    @Size(max = 255, message = "Dopuszczalna ilość znaków wynosi 255")
     private String firmName;
 
     @Column(nullable = false)
-    @NotBlank
-    @Size(min=6, max = 6)
+    @Size(min=6, max = 6, message = "Wpisz kod pocztowy w formacie XX-XXX")
     private String firmPostCode;
 
     @Column(nullable = false)
-    @NotBlank
-    @Size(max = 100)
+    @NotBlank(message = "Pole nie może być puste")
+    @Size(max = 100, message = "Dopuszczalna ilość znaków wynosi 100")
     private String firmCity;
 
     @Column(nullable = false)
-    @NotBlank
-    @Size(max = 100)
+    @NotBlank(message = "Pole nie może być puste")
+    @Size(max = 100, message = "Dopuszczalna ilość znaków wynosi 100")
     private String firmStreet;
 
     @Column(nullable = false)
-    @NotBlank
-    @Size(max = 15)
+    @NotBlank(message = "Pole nie może być puste")
+    @Size(max = 15, message = "Dopuszczalna ilość znaków wynosi 15")
     private String firmPhone;
 
     @Column(nullable = false)
-    @NotBlank
-    @NIP
+    @Size(min=10, max = 10, message = "Wpisz 10 cyfr")
+    @NIP(message = "Wpisz prawidłowy nr NIP")
     private String firmNIP;
 
     @Column(nullable = false)
-    @NotBlank
-    @REGON
+    @REGON(message = "Wpisz prawidłowy nr REGON")
     private String firmREGON;
 
     @Column(nullable = false)
-    @NotBlank
-    @Size(max = 50)
+    @NotBlank(message = "Pole nie może być puste")
+    @Size(max = 50, message = "Dopuszczalna ilość znaków wynosi 50")
     private String firmBankName;
 
     @Column(nullable = false)
-    @NotBlank
-    @Size(min=32, max = 32)
+    @Size(min=32, max = 32, message = "Wpisz nr w formacie XX XXXX XXXX XXXX XXXX XXXX XXXX")
     private String firmBankAccount;
 
     public Long getId() {

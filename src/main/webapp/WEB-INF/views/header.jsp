@@ -23,7 +23,7 @@
             <a href="qqqqqqqqqqq" class="btn btn-info mx-2">Użytkownicy</a>
         </li>
         <li class="nav-item">
-            <a href="qqqqqqqqqq" class="btn btn-info mx-2">Dane Firmy</a>
+            <a href="/firmData/showFirmData" class="btn btn-info mx-2">Dane Firmy</a>
         </li>
         <li class="nav-item">
             <a href="/customer/showAllCustomers" class="btn btn-info mx-2">Klienci</a>

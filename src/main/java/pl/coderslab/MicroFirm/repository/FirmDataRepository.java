@@ -5,4 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import pl.coderslab.MicroFirm.model.FirmData;
 
 public interface FirmDataRepository extends JpaRepository<FirmData, Long> {
+
+    FirmData findFirstByIdGreaterThan(long id);
+
 }
