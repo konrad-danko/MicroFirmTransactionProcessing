@@ -4,7 +4,7 @@
 
 <html>
 <head>
-    <title>?????????Title?????????</title>
+    <title>Home Page</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -14,8 +14,10 @@
 </head>
 <body>
 <div class="container-fluid">
+    <%@ include file="header.jsp" %>
 
-    <h2>?????????CoToZaWidok?????????</h2>
+    
+    <h2>Nie mam na razie pomysłu co by tu zaprezentować na stronie głównej</h2>
 
 
 
