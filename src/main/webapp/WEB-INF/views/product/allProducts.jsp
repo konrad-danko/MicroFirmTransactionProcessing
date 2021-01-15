@@ -38,12 +38,28 @@
                 <td><a href="/product/showProduct/${product.id}">${product.productName}</a></td>
                 <td class="text-right">${product.netPricePer1000}</td>
                 <td class="text-right">${product.vatRate}</td>
-                <td class="text-right">${String.format("%.2f", (product.netPricePer1000 * ((product.vatRate/100)+1))).replaceAll(",", ".")}</td>
+                <td class="text-right"></td>
+                <%--<td class="text-right" id="grossPricePer1000">${String.format("%.2f", (product.netPricePer1000 * ((product.vatRate+100)/100))).replaceAll(",", ".")}</td>--%>
             </tr>
         </c:forEach>
         </tbody>
     </table>
 
 </div>
+<script>
+    const trElements = document.querySelectorAll("tbody tr");
+
+    trElements.forEach(function (element){
+        const grossPricePer1000Element = element.lastElementChild;
+        const vatRateElement = grossPricePer1000Element.previousElementSibling;
+        const netPricePer1000Element = vatRateElement.previousElementSibling;
+
+        const netPrice = netPricePer1000Element.innerText;
+        const vatRate = vatRateElement.innerText;
+        const grossPrice = netPrice * ((vatRate/100)+1);
+
+        grossPricePer1000Element.innerText = grossPrice.toFixed(2);
+    });
+</script>
 </body>
 </html>

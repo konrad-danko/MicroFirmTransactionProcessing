@@ -20,7 +20,7 @@
             <a href="/home" class="btn btn-info mx-2">Strona główna</a>
         </li>
         <li class="nav-item">
-            <a href="qqqqqqqqqqq" class="btn btn-info mx-2">Użytkownicy</a>
+            <a href="/user/showAllUsers" class="btn btn-info mx-2">Użytkownicy</a>
         </li>
         <li class="nav-item">
             <a href="/firmData/showFirmData" class="btn btn-info mx-2">Dane Firmy</a>

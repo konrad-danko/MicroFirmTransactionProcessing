@@ -20,7 +20,7 @@
 <form:form modelAttribute="product" method="post" class="border rounded shadow-lg">
 
     <div class="d-flex mt-3">
-        <div class="form-group mx-2">
+        <div class="form-group mx-2" style="width:3em">
             <label for="id">Id:</label>
             <form:input path="id" id="id" class="form-control" disabled="true"/>
         </div>
@@ -44,7 +44,7 @@
         </div>
         <div class="form-group mx-2">
             <label for="grossPricePer1000">Cena brutto za 1000 szt. (PLN):</label>
-            <input id="grossPricePer1000" class="form-control text-right" disabled value="${String.format("%.2f", (product.netPricePer1000 * ((product.vatRate/100)+1))).replaceAll(",", ".")}">
+            <input id="grossPricePer1000" class="form-control text-right" disabled>
         </div>
     </div>
     <br>
@@ -55,10 +55,10 @@
     </div>
     <br>
     <div class="form-group mb-4">
-        <input type="submit" value="Zatwierdź" class="btn btn-success mx-3 ${submitBtnVisibleParam}">
+        <a href="/product/showAllProducts" class="btn btn-primary mx-3">Wróć do listy produktów</a>
         <a href="/product/editProduct/${product.id}" class="btn btn-warning mx-3 ${editBtnVisibleParam}">Edytuj</a>
         <a href="/product/deleteProduct/${product.id}" class="btn btn-danger mx-3 ${delBtnVisibleParam}">Usuń</a>
-        <a href="/product/showAllProducts" class="btn btn-primary mx-3">Wróć do listy produktów</a>
+        <input type="submit" value="Zatwierdź" class="btn btn-success mx-3 ${submitBtnVisibleParam}">
     </div>
 
     <form:hidden path="createdByUser"/>
@@ -68,5 +68,29 @@
 
 </form:form>
 </div>
+
+<script>
+    const netPricePer1000InputElement = document.getElementById("netPricePer1000");
+    const vatRateInputElement = document.getElementById("vatRate");
+    const grossPricePer1000InputElement = document.getElementById("grossPricePer1000");
+
+    function calculateGrossPrice(){
+        let netPrice = netPricePer1000InputElement.value;
+        let vatRate = vatRateInputElement.value;
+        let grossPrice = netPrice * ((vatRate/100)+1);
+        return grossPrice.toFixed(2);
+    }
+
+    netPricePer1000InputElement.addEventListener("change", function (){
+        grossPricePer1000InputElement.value = calculateGrossPrice();
+    });
+    vatRateInputElement.addEventListener("change", function (){
+        grossPricePer1000InputElement.value = calculateGrossPrice();
+    });
+    document.addEventListener("DOMContentLoaded", function (){
+        grossPricePer1000InputElement.value = calculateGrossPrice();
+    });
+
+</script>
 </body>
 </html>

@@ -20,7 +20,7 @@
 <form:form modelAttribute="firmData" method="post" class="border rounded shadow-lg">
 
     <div class="d-flex mt-3">
-        <div class="form-group mx-2">
+        <div class="form-group mx-2" style="width:3em">
             <label for="id">Id:</label>
             <form:input path="id" id="id" class="form-control" disabled="true"/>
         </div>
@@ -79,9 +79,10 @@
     <br>
     <br>
     <div class="form-group mb-4">
-        <input type="submit" value="Zatwierdź" class="btn btn-success mx-3 ${submitBtnVisibleParam}">
-        <a href="/firmData/editFirmData/${firmData.id}" class="btn btn-warning mx-3 ${editBtnVisibleParam}">Edytuj</a>
         <a href="/home" class="btn btn-primary mx-3">Wróć na stronę główną</a>
+        <a href="/firmData/editFirmData/${firmData.id}" class="btn btn-warning mx-3 ${editBtnVisibleParam}">Edytuj</a>
+        <input type="submit" value="Zatwierdź" class="btn btn-success mx-3 ${submitBtnVisibleParam}">
+
     </div>
 
 </form:form>

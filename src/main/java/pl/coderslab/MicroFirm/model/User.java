@@ -1,7 +1,5 @@
 package pl.coderslab.MicroFirm.model;
 
-import org.mindrot.jbcrypt.BCrypt;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -14,30 +12,25 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true, length=20)
-    @NotBlank
-    @Size(max = 20)
+    @Column(nullable = false, unique = true)
+    @NotBlank(message = "Pole nie może być puste")
+    @Size(max = 20, message = "Dopuszczalna ilość znaków wynosi 20")
     private String loginName;
 
-    @Column(nullable = false, length=50)
-    @NotBlank
-    @Size(max = 50)
+    @Column(nullable = false)
+    @NotBlank(message = "Pole nie może być puste")
+    @Size(max = 50, message = "Dopuszczalna ilość znaków wynosi 50")
     private String firstName;
 
-    @Column(nullable = false, length=50)
-    @NotBlank
-    @Size(max = 50)
+    @Column(nullable = false)
+    @NotBlank(message = "Pole nie może być puste")
+    @Size(max = 50, message = "Dopuszczalna ilość znaków wynosi 50")
     private String lastName;
 
     @Column(nullable = false)
-    @NotBlank
+    @NotBlank(message = "Pole nie może być puste")
     private String password;
-
-    //metoda hashująca hasło:
-    public String hashPassword (String password) {
-        return BCrypt.hashpw(password, BCrypt.gensalt());
-    }
-
+    
     public Long getId() {
         return id;
     }

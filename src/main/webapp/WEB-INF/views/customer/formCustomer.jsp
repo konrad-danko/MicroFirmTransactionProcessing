@@ -20,7 +20,7 @@
     <form:form modelAttribute="customer" method="post" class="border rounded shadow-lg">
 
         <div class="d-flex mt-3">
-            <div class="form-group mx-2">
+            <div class="form-group mx-2" style="width:3em">
                 <label for="id">Id:</label>
                 <form:input path="id" id="id" class="form-control" disabled="true"/>
             </div>
@@ -61,10 +61,10 @@
         </div>
         <br>
         <div class="form-group mb-4">
-            <input type="submit" value="Zatwierdź" class="btn btn-success mx-3 ${submitBtnVisibleParam}">
+            <a href="/customer/showAllCustomers" class="btn btn-primary mx-3">Wróć do listy klientów</a>
             <a href="/customer/editCustomer/${customer.id}" class="btn btn-warning mx-3 ${editBtnVisibleParam}">Edytuj</a>
             <a href="/customer/deleteCustomer/${customer.id}" class="btn btn-danger mx-3 ${delBtnVisibleParam}">Usuń</a>
-            <a href="/customer/showAllCustomers" class="btn btn-primary mx-3">Wróć do listy klientów</a>
+            <input type="submit" value="Zatwierdź" class="btn btn-success mx-3 ${submitBtnVisibleParam}">
         </div>
 
         <form:hidden path="createdByUser"/>
