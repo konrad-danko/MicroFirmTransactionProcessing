@@ -16,57 +16,59 @@
 <div class="container-fluid">
     <%@include file="../header.jsp"%>
 
-    <h2>${headerMessage}</h2>
-<form:form modelAttribute="product" method="post" class="border rounded shadow-lg">
+    <div class="d-flex justify-content-center">
+        <div style="width:90%">
+            <h2>${headerMessage}</h2>
+            <form:form modelAttribute="product" method="post" class="border rounded shadow-lg">
+                <div class="d-flex mt-3">
+                    <div class="form-group mx-2" style="width:3em">
+                        <label for="id">Id:</label>
+                        <form:input path="id" id="id" class="form-control" disabled="true"/>
+                    </div>
+                    <div class="form-group mx-2 flex-grow-1">
+                        <label for="productName">Nazwa:</label>
+                        <form:input path="productName" id="productName" class="form-control" disabled="${disabledParam}"/>
+                        <form:errors path="productName" class="text-danger"/>
+                    </div>
+                </div>
+                <br>
+                <div class="d-flex">
+                    <div class="form-group mx-2">
+                        <label for="netPricePer1000">Cena netto za 1000 szt. (PLN):</label>
+                        <form:input path="netPricePer1000" id="netPricePer1000" class="form-control text-right" disabled="${disabledParam}"/>
+                        <form:errors path="netPricePer1000" class="text-danger"/>
+                    </div>
+                    <div class="form-group mx-2">
+                        <label for="vatRate">Stawka VAT (%):</label>
+                        <form:input path="vatRate" id="vatRate" class="form-control text-right" disabled="${disabledParam}"/>
+                        <form:errors path="vatRate" class="text-danger"/>
+                    </div>
+                    <div class="form-group mx-2">
+                        <label for="grossPricePer1000">Cena brutto za 1000 szt. (PLN):</label>
+                        <input id="grossPricePer1000" class="form-control text-right" disabled>
+                    </div>
+                </div>
+                <br>
+                <br>
+                <div class="ml-3">
+                    <p>Utworzono ${product.created.toLocalDate()} ${product.created.toLocalTime()} przez ${product.createdByUser.getLoginName()}</p>
+                    <p>Edytowano ${product.updated.toLocalDate()} ${product.updated.toLocalTime()} przez ${product.updatedByUser.getLoginName()}</p>
+                </div>
+                <br>
+                <div class="form-group mb-4">
+                    <a href="/product/showAllProducts" class="btn btn-primary mx-3">Wróć do listy produktów</a>
+                    <a href="/product/editProduct/${product.id}" class="btn btn-warning mx-3 ${editBtnVisibleParam}">Edytuj</a>
+                    <a href="/product/deleteProduct/${product.id}" class="btn btn-danger mx-3 ${delBtnVisibleParam}">Usuń</a>
+                    <input type="submit" value="Zatwierdź" class="btn btn-success mx-3 ${submitBtnVisibleParam}">
+                </div>
 
-    <div class="d-flex mt-3">
-        <div class="form-group mx-2" style="width:3em">
-            <label for="id">Id:</label>
-            <form:input path="id" id="id" class="form-control" disabled="true"/>
-        </div>
-        <div class="form-group mx-2 flex-grow-1">
-            <label for="productName">Nazwa:</label>
-            <form:input path="productName" id="productName" class="form-control" disabled="${disabledParam}"/>
-            <form:errors path="productName" class="text-danger"/>
+                <form:hidden path="createdByUser"/>
+                <form:hidden path="updatedByUser"/>
+                <form:hidden path="created"/>
+                <form:hidden path="updated"/>
+            </form:form>
         </div>
     </div>
-    <br>
-    <div class="d-flex">
-        <div class="form-group mx-2">
-            <label for="netPricePer1000">Cena netto za 1000 szt. (PLN):</label>
-            <form:input path="netPricePer1000" id="netPricePer1000" class="form-control text-right" disabled="${disabledParam}"/>
-            <form:errors path="netPricePer1000" class="text-danger"/>
-        </div>
-        <div class="form-group mx-2">
-            <label for="vatRate">Stawka VAT (%):</label>
-            <form:input path="vatRate" id="vatRate" class="form-control text-right" disabled="${disabledParam}"/>
-            <form:errors path="vatRate" class="text-danger"/>
-        </div>
-        <div class="form-group mx-2">
-            <label for="grossPricePer1000">Cena brutto za 1000 szt. (PLN):</label>
-            <input id="grossPricePer1000" class="form-control text-right" disabled>
-        </div>
-    </div>
-    <br>
-    <br>
-    <div class="ml-3">
-        <p>Utworzono ${product.created.toLocalDate()} ${product.created.toLocalTime()} przez ${product.createdByUser.getLoginName()}</p>
-        <p>Edytowano ${product.updated.toLocalDate()} ${product.updated.toLocalTime()} przez ${product.updatedByUser.getLoginName()}</p>
-    </div>
-    <br>
-    <div class="form-group mb-4">
-        <a href="/product/showAllProducts" class="btn btn-primary mx-3">Wróć do listy produktów</a>
-        <a href="/product/editProduct/${product.id}" class="btn btn-warning mx-3 ${editBtnVisibleParam}">Edytuj</a>
-        <a href="/product/deleteProduct/${product.id}" class="btn btn-danger mx-3 ${delBtnVisibleParam}">Usuń</a>
-        <input type="submit" value="Zatwierdź" class="btn btn-success mx-3 ${submitBtnVisibleParam}">
-    </div>
-
-    <form:hidden path="createdByUser"/>
-    <form:hidden path="updatedByUser"/>
-    <form:hidden path="created"/>
-    <form:hidden path="updated"/>
-
-</form:form>
 </div>
 
 <script>

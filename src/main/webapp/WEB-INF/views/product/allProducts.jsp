@@ -16,36 +16,40 @@
 <div class="container-fluid">
     <%@include file="../header.jsp"%>
 
-    <div class="clearfix">
-        <h2 class="float-left ml-3">Produkty / Cennik</h2>
-        <a href="/product/addProduct" class="float-right btn btn-success mr-3">Dodaj nowy produkt</a>
+    <div class="d-flex justify-content-center">
+        <div style="width:70%">
+            <div class="clearfix">
+                <h2 class="float-left ml-3">Produkty, Ceny za 1000 szt.(PLN)</h2>
+                <a href="/product/addProduct" class="float-right btn btn-success mr-3">Dodaj nowy produkt</a>
+            </div>
+
+            <table class="table table-bordered table-hover table-sm shadow-lg">
+                <thead class="bg-primary text-white">
+                <tr>
+                    <th>Id</th>
+                    <th>Nazwa</th>
+                    <th class="text-right">Netto</th>
+                    <th class="text-right">VAT (%)</th>
+                    <th class="text-right">Brutto</th>
+                </tr>
+                </thead>
+                <tbody>
+                <c:forEach items="${allProducts}" var="product">
+                    <tr>
+                        <td>${product.id}</td>
+                        <td><a href="/product/showProduct/${product.id}">${product.productName}</a></td>
+                        <td class="text-right">${product.netPricePer1000}</td>
+                        <td class="text-right">${product.vatRate}</td>
+                        <td class="text-right"></td>
+                            <%--<td class="text-right" id="grossPricePer1000">${String.format("%.2f", (product.netPricePer1000 * ((product.vatRate+100)/100))).replaceAll(",", ".")}</td>--%>
+                    </tr>
+                </c:forEach>
+                </tbody>
+            </table>
+        </div>
     </div>
-
-    <table class="table table-bordered table-hover table-sm shadow-lg">
-        <thead class="bg-primary text-white">
-        <tr>
-            <th>Id</th>
-            <th>Nazwa</th>
-            <th class="text-right">Cena netto za 1000 szt. (PLN)</th>
-            <th class="text-right">Stawka VAT (%)</th>
-            <th class="text-right">Cena brutto za 1000 szt. (PLN)</th>
-        </tr>
-        </thead>
-        <tbody>
-        <c:forEach items="${allProducts}" var="product">
-            <tr>
-                <td>${product.id}</td>
-                <td><a href="/product/showProduct/${product.id}">${product.productName}</a></td>
-                <td class="text-right">${product.netPricePer1000}</td>
-                <td class="text-right">${product.vatRate}</td>
-                <td class="text-right"></td>
-                <%--<td class="text-right" id="grossPricePer1000">${String.format("%.2f", (product.netPricePer1000 * ((product.vatRate+100)/100))).replaceAll(",", ".")}</td>--%>
-            </tr>
-        </c:forEach>
-        </tbody>
-    </table>
-
 </div>
+
 <script>
     const trElements = document.querySelectorAll("tbody tr");
 

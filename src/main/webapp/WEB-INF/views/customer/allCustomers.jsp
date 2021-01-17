@@ -16,36 +16,39 @@
 <div class="container-fluid">
     <%@include file="../header.jsp"%>
 
-    <div class="clearfix">
-        <h2 class="float-left ml-3">Klienci</h2>
-        <a href="/customer/addCustomer" class="float-right btn btn-success mr-3">Dodaj nowego klienta</a>
+    <div class="d-flex justify-content-center">
+        <div style="width:95%">
+            <div class="clearfix">
+                <h2 class="float-left ml-3">Klienci</h2>
+                <a href="/customer/addCustomer" class="float-right btn btn-success mr-3">Dodaj nowego klienta</a>
+            </div>
+
+            <table class="table table-bordered table-hover table-sm shadow-lg">
+                <thead class="bg-primary text-white">
+                <tr>
+                    <th>Id</th>
+                    <th>Nazwa</th>
+                    <th class="text-center">NIP</th>
+                    <th class="text-center">Kod pocztowy</th>
+                    <th>Miejscowość</th>
+                    <th>Ulica</th>
+                </tr>
+                </thead>
+                <tbody>
+                <c:forEach items="${allCustomers}" var="customer">
+                    <tr>
+                        <td>${customer.id}</td>
+                        <td><a href="/customer/showCustomer/${customer.id}">${customer.customerName}</a></td>
+                        <td class="text-center">${customer.customerNIP}</td>
+                        <td class="text-center">${customer.customerPostCode}</td>
+                        <td>${customer.customerCity}</td>
+                        <td>${customer.customerStreet}</td>
+                    </tr>
+                </c:forEach>
+                </tbody>
+            </table>
+        </div>
     </div>
-
-    <table class="table table-bordered table-hover table-sm shadow-lg">
-        <thead class="bg-primary text-white">
-        <tr>
-            <th>Id</th>
-            <th>Nazwa</th>
-            <th class="text-center">NIP</th>
-            <th class="text-center">Kod pocztowy</th>
-            <th>Miejscowość</th>
-            <th>Ulica</th>
-        </tr>
-        </thead>
-        <tbody>
-        <c:forEach items="${allCustomers}" var="customer">
-            <tr>
-                <td>${customer.id}</td>
-                <td><a href="/customer/showCustomer/${customer.id}">${customer.customerName}</a></td>
-                <td class="text-center">${customer.customerNIP}</td>
-                <td class="text-center">${customer.customerPostCode}</td>
-                <td>${customer.customerCity}</td>
-                <td>${customer.customerStreet}</td>
-            </tr>
-        </c:forEach>
-        </tbody>
-    </table>
-
 </div>
 </body>
 </html>

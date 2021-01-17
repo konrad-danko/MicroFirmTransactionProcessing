@@ -11,7 +11,6 @@ import pl.coderslab.MicroFirm.repository.CustomerRepository;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.util.Objects;
 
 @Controller
 @RequestMapping(path = "/customer")
@@ -20,6 +19,11 @@ public class CustomerController {
     private final CustomerRepository customerRepository;
     public CustomerController(CustomerRepository customerRepository) {
         this.customerRepository = customerRepository;
+    }
+
+    private User getLoggedUser(HttpServletRequest request){
+        HttpSession session = request.getSession();
+        return (User)session.getAttribute("loggedUser");
     }
 
     @GetMapping(path = "/showAllCustomers")
@@ -53,7 +57,7 @@ public class CustomerController {
         return "/customer/formCustomer";
     }
     @PostMapping(path = "/addCustomer")
-    public String processAddCustomer(@ModelAttribute @Valid Customer customer, BindingResult result, Model model) {
+    public String processAddCustomer(@ModelAttribute @Valid Customer customer, BindingResult result, Model model, HttpServletRequest request) {
         if (result.hasErrors()) {
             model.addAttribute("headerMessage", "Dodaj nowego klienta");
             model.addAttribute("disabledParam", "false");
@@ -62,6 +66,7 @@ public class CustomerController {
             model.addAttribute("delBtnVisibleParam", "invisible");
             return "/customer/formCustomer";
         }
+        customer.setCreatedByUser(getLoggedUser(request));
         customerRepository.save(customer);
         return "redirect:/customer/showAllCustomers";
     }
@@ -78,7 +83,7 @@ public class CustomerController {
         return "/customer/formCustomer";
     }
     @PostMapping(path = "/editCustomer/{id}")
-    public String processEditCustomer(@ModelAttribute @Valid Customer customer, BindingResult result, Model model) {
+    public String processEditCustomer(@ModelAttribute @Valid Customer customer, BindingResult result, Model model, HttpServletRequest request) {
         if (result.hasErrors()) {
             model.addAttribute("headerMessage", "Edytuj dane klienta");
             model.addAttribute("disabledParam", "false");
@@ -87,6 +92,10 @@ public class CustomerController {
             model.addAttribute("delBtnVisibleParam", "invisible");
             return "/customer/formCustomer";
         }
+        customer.setUpdatedByUser(getLoggedUser(request));
+        //poniższa linijka jest dlatego, że przeglądarka obcina sekundy z daty "created"
+        //i dlatego muszę pobierać tą datę z bazy i dopisać do customera przed ponownym zapisem do bazy
+        customer.setCreated(customerRepository.findById(customer.getId()).get().getCreated());
         customerRepository.save(customer);
         return "redirect:/customer/showAllCustomers";
     }

@@ -16,34 +16,35 @@
 <div class="container-fluid">
     <%@include file="../header.jsp"%>
 
-    <div class="clearfix">
-        <h2 class="float-left ml-3">Użytkownicy</h2>
-        <a href="/user/addUser" class="float-right btn btn-success mr-3">Dodaj nowego użytkownika</a>
+    <div class="d-flex justify-content-center">
+        <div style="width:50%">
+            <div class="clearfix">
+                <h2 class="float-left ml-3">Użytkownicy</h2>
+                <a href="/user/addUser" class="float-right btn btn-success mr-3">Dodaj nowego użytkownika</a>
+            </div>
+
+            <table class="table table-bordered table-hover table-sm shadow-lg">
+                <thead class="bg-primary text-white">
+                <tr>
+                    <th>Id</th>
+                    <th>LoginName</th>
+                    <th>Imię</th>
+                    <th>Nazwisko</th>
+                </tr>
+                </thead>
+                <tbody>
+                <c:forEach items="${allUsers}" var="user">
+                    <tr>
+                        <td>${user.id}</td>
+                        <td><a href="/user/showUser/${user.id}">${user.loginName}</a></td>
+                        <td>${user.firstName}</td>
+                        <td>${user.lastName}</td>
+                    </tr>
+                </c:forEach>
+                </tbody>
+            </table>
+        </div>
     </div>
-
-    <table class="table table-bordered table-hover table-sm shadow-lg">
-        <thead class="bg-primary text-white">
-        <tr>
-            <th>Id</th>
-            <th>LoginName</th>
-            <th>Imię</th>
-            <th>Nazwisko</th>
-            <th>Hasło ?????</th>
-        </tr>
-        </thead>
-        <tbody>
-        <c:forEach items="${allUsers}" var="user">
-            <tr>
-                <td>${user.id}</td>
-                <td><a href="/user/showUser/${user.id}">${user.loginName}</a></td>
-                <td>${user.firstName}</td>
-                <td>${user.lastName}</td>
-                <td>${user.password}</td>
-            </tr>
-        </c:forEach>
-        </tbody>
-    </table>
-
 </div>
 </body>
 </html>

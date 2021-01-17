@@ -5,8 +5,11 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import pl.coderslab.MicroFirm.model.Product;
+import pl.coderslab.MicroFirm.model.User;
 import pl.coderslab.MicroFirm.repository.ProductRepository;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 @Controller
@@ -16,6 +19,11 @@ public class ProductController {
     private final ProductRepository productRepository;
     public ProductController(ProductRepository productRepository) {
         this.productRepository = productRepository;
+    }
+
+    private User getLoggedUser(HttpServletRequest request){
+        HttpSession session = request.getSession();
+        return (User)session.getAttribute("loggedUser");
     }
 
     @GetMapping(path = "/showAllProducts")
@@ -48,7 +56,7 @@ public class ProductController {
         return "/product/formProduct";
     }
     @PostMapping(path = "/addProduct")
-    public String processAddProduct(@ModelAttribute @Valid Product product, BindingResult result, Model model) {
+    public String processAddProduct(@ModelAttribute @Valid Product product, BindingResult result, Model model, HttpServletRequest request) {
         if (result.hasErrors()) {
             model.addAttribute("headerMessage", "Dodaj nowy produkt");
             model.addAttribute("disabledParam", "false");
@@ -57,6 +65,7 @@ public class ProductController {
             model.addAttribute("delBtnVisibleParam", "invisible");
             return "/product/formProduct";
         }
+        product.setCreatedByUser(getLoggedUser(request));
         productRepository.save(product);
         return "redirect:/product/showAllProducts";
     }
@@ -73,7 +82,7 @@ public class ProductController {
         return "/product/formProduct";
     }
     @PostMapping(path = "/editProduct/{id}")
-    public String processEditProduct(@ModelAttribute @Valid Product product, BindingResult result, Model model) {
+    public String processEditProduct(@ModelAttribute @Valid Product product, BindingResult result, Model model, HttpServletRequest request) {
         if (result.hasErrors()) {
             model.addAttribute("headerMessage", "Edytuj dane produktu");
             model.addAttribute("disabledParam", "false");
@@ -82,6 +91,10 @@ public class ProductController {
             model.addAttribute("delBtnVisibleParam", "invisible");
             return "/product/formProduct";
         }
+        product.setUpdatedByUser(getLoggedUser(request));
+        //poniższa linijka jest dlatego, że przeglądarka obcina sekundy z daty "created"
+        //i dlatego muszę pobierać tą datę z bazy i dopisać do productu przed ponownym zapisem do bazy
+        product.setCreated(productRepository.findById(product.getId()).get().getCreated());
         productRepository.save(product);
         return "redirect:/product/showAllProducts";
     }
