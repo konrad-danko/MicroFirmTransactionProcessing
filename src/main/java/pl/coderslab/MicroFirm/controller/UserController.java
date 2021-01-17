@@ -19,18 +19,13 @@ public class UserController {
         this.userRepository = userRepository;
     }
 
-    //getLoggedUser
-
     //metoda hashująca hasło:
     private String hashPassword (String password) {
         return BCrypt.hashpw(password, BCrypt.gensalt());
     }
 
-    String loginName = "JakiśTamUser";
-
     @GetMapping(path = "/showAllUsers")
     public String showAllUsers(Model model) {
-        model.addAttribute("loginName", loginName);
         model.addAttribute("allUsers", userRepository.findAll());
         return "/user/allUsers";
     }
@@ -38,10 +33,8 @@ public class UserController {
     //show a user
     @GetMapping(path = "/showUser/{id}")
     public String showUser(Model model, @PathVariable long id) {
-        model.addAttribute("loginName", loginName);
         model.addAttribute("user", userRepository.findById(id).orElse(null));
         model.addAttribute("headerMessage", "Dane użytkownika");
-
         model.addAttribute("disabledParam", "true");
         model.addAttribute("submitBtnVisibleParam", "invisible");
         model.addAttribute("editBtnVisibleParam", "visible");
@@ -52,7 +45,6 @@ public class UserController {
     //add a user
     @GetMapping(path = "/addUser")
     public String initiateAddUser(Model model) {
-        model.addAttribute("loginName", loginName);
         User user = new User();
         user.setPassword("password");
         model.addAttribute("user", user);
@@ -66,7 +58,6 @@ public class UserController {
     @PostMapping(path = "/addUser")
     public String processAddUser(@ModelAttribute @Valid User user, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            model.addAttribute("loginName", loginName);
             model.addAttribute("headerMessage", "Dodaj nowego użytkownika");
             model.addAttribute("disabledParam", "false");
             model.addAttribute("submitBtnVisibleParam", "visible");
@@ -74,11 +65,8 @@ public class UserController {
             model.addAttribute("delBtnVisibleParam", "invisible");
             return "/user/formUser";
         }
-
-        //przed zapisem do bazy hashujemy "loginName" jako hasło tymczasowe
-        String userPassword = user.getLoginName();
-        user.setPassword(hashPassword(userPassword));
-
+        //przed zapisem do bazy hashujemy "password" jako hasło tymczasowe
+        user.setPassword(hashPassword("password"));
         userRepository.save(user);
         return "redirect:/user/showAllUsers";
     }
@@ -86,7 +74,6 @@ public class UserController {
     //edit a user
     @GetMapping(path = "/editUser/{id}")
     public String initiateEditUser(Model model, @PathVariable long id) {
-        model.addAttribute("loginName", loginName);
         model.addAttribute("user", userRepository.findById(id).orElse(null));
         model.addAttribute("headerMessage", "Edytuj dane użytkownika");
         model.addAttribute("disabledParam", "false");
@@ -98,7 +85,6 @@ public class UserController {
     @PostMapping(path = "/editUser/{id}")
     public String processEditUser(@ModelAttribute @Valid User user, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            model.addAttribute("loginName", loginName);
             model.addAttribute("headerMessage", "Edytuj dane użytkownika");
             model.addAttribute("disabledParam", "false");
             model.addAttribute("submitBtnVisibleParam", "visible");
@@ -113,7 +99,6 @@ public class UserController {
     //delete a user
     @GetMapping(path = "/deleteUser/{id}")
     public String initiateDeleteUser(Model model, @PathVariable long id) {
-        model.addAttribute("loginName", loginName);
         model.addAttribute("user", userRepository.findById(id).orElse(null));
         model.addAttribute("headerMessage", "Potwierdź usunięcie danych użytkownika");
         model.addAttribute("disabledParam", "true");

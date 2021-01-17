@@ -14,33 +14,46 @@
 </head>
 <body>
 
-<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark mt-1 rounded-lg">
+
     <ul class="navbar-nav">
         <li class="nav-item">
             <a href="/home" class="btn btn-info mx-2">Strona główna</a>
         </li>
         <li class="nav-item">
-            <a href="/user/showAllUsers" class="btn btn-info mx-2">Użytkownicy</a>
+            <a href="/firmData/showFirmData" class="btn btn-info mx-2">Dane Firmy</a>
         </li>
         <li class="nav-item">
-            <a href="/firmData/showFirmData" class="btn btn-info mx-2">Dane Firmy</a>
+            <a href="/user/showAllUsers" class="btn btn-info mx-2">Użytkownicy</a>
         </li>
         <li class="nav-item">
             <a href="/customer/showAllCustomers" class="btn btn-info mx-2">Klienci</a>
         </li>
         <li class="nav-item">
-            <a href="/product/showAllProducts" class="btn btn-info mx-2">Produkty/Cennik</a>
+            <a href="/product/showAllProducts" class="btn btn-info mx-2">Produkty</a>
         </li>
         <li class="nav-item">
             <a href="/transaction/showAllTransactions" class="btn btn-info mx-2">Transakcje</a>
         </li>
         <li class="nav-item">
-            <a href="qqqqqqqqqq" class="btn btn-info mx-2">Raporty</a>
+            <a href="/report/showAllReports" class="btn btn-info mx-2">Raporty</a>
         </li>
     </ul>
-    <h1 class="navbar-text ml-5">Micro Firm</h1>
+
+    <h3 class="navbar-text mx-2">Micro Firm</h3>
+
+    <c:if test="${not empty loginName}">
+        <div class="btn-group-vertical btn-group-sm ml-auto">
+            <a href="/login/editPassword" class="btn btn-secondary font-weight-bold">${loginName}</a>
+            <a href="/login/logout" class="btn btn-danger">Wyloguj się</a>
+        </div>
+    </c:if>
+    <c:if test="${empty loginName}">
+        <a href="/login/login" class="btn btn-secondary ml-auto font-weight-bold">Zaloguj się</a>
+    </c:if>
+
 </nav>
-<p>Jesteś zalogowany jako ${loginName} - na header.jsp</p>
+<br>
 
 </body>
 </html>

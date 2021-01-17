@@ -17,13 +17,9 @@ public class FirmDataController {
         this.firmDataRepository = firmDataRepository;
     }
 
-    //    private User getLoggedUser??????????????????????
-    String loginName = "JakiśTamUser";
-
     //show FirmData
     @GetMapping(path = "/showFirmData")
     public String showProduct(Model model) {
-        model.addAttribute("loginName", loginName);
         if(firmDataRepository.findAll().size()==0){
             return "redirect:/firmData/addFirmData";
         }
@@ -38,7 +34,6 @@ public class FirmDataController {
     //add firmData
     @GetMapping(path = "/addFirmData")
     public String initiateAddFirmData(Model model) {
-        model.addAttribute("loginName", loginName);
         model.addAttribute("firmData", new FirmData());
         model.addAttribute("headerMessage", "Wpisz dane Firmy");
         model.addAttribute("disabledParam", "false");
@@ -49,7 +44,6 @@ public class FirmDataController {
     @PostMapping(path = "/addFirmData")
     public String processAddFirmData(@ModelAttribute @Valid FirmData firmData, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            model.addAttribute("loginName", loginName);
             model.addAttribute("headerMessage", "Wpisz dane Firmy");
             model.addAttribute("disabledParam", "false");
             model.addAttribute("submitBtnVisibleParam", "visible");
@@ -63,7 +57,6 @@ public class FirmDataController {
     //edit firmData
     @GetMapping(path = "/editFirmData/{id}")
     public String initiateEditFirmData(Model model, @PathVariable long id) {
-        model.addAttribute("loginName", loginName);
         model.addAttribute("firmData", firmDataRepository.findById(id).orElse(null));
         model.addAttribute("headerMessage", "Edytuj dane Firmy");
         model.addAttribute("disabledParam", "false");
@@ -74,7 +67,6 @@ public class FirmDataController {
     @PostMapping(path = "/editFirmData/{id}")
     public String processEditFirmData(@ModelAttribute @Valid FirmData firmData, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            model.addAttribute("loginName", loginName);
             model.addAttribute("headerMessage", "Edytuj dane Firmy");
             model.addAttribute("disabledParam", "false");
             model.addAttribute("submitBtnVisibleParam", "visible");

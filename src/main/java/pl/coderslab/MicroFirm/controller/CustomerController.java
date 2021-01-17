@@ -22,20 +22,8 @@ public class CustomerController {
         this.customerRepository = customerRepository;
     }
 
-    private User getLoggedUser(HttpServletRequest request){
-        HttpSession session = request.getSession();
-        User loggedUser = new User();
-        if (Objects.nonNull(session.getAttribute("loggedUser"))){
-            loggedUser = (User)session.getAttribute("loggedUser");
-        }
-        return loggedUser;
-    }
-
-    String loginName = "JakiśTamUser";
-
     @GetMapping(path = "/showAllCustomers")
     public String showAllCustomers(Model model) {
-        model.addAttribute("loginName", loginName);
         model.addAttribute("allCustomers", customerRepository.findAll());
         return "/customer/allCustomers";
     }
@@ -43,7 +31,6 @@ public class CustomerController {
     //show a customer
     @GetMapping(path = "/showCustomer/{id}")
     public String showCustomer(Model model, @PathVariable long id) {
-        model.addAttribute("loginName", loginName);
         model.addAttribute("customer", customerRepository.findById(id).orElse(null));
         model.addAttribute("headerMessage", "Dane klienta");
 
@@ -57,7 +44,6 @@ public class CustomerController {
     //add a customer
     @GetMapping(path = "/addCustomer")
     public String initiateAddCustomer(Model model) {
-        model.addAttribute("loginName", loginName);
         model.addAttribute("customer", new Customer());
         model.addAttribute("headerMessage", "Dodaj nowego klienta");
         model.addAttribute("disabledParam", "false");
@@ -69,7 +55,6 @@ public class CustomerController {
     @PostMapping(path = "/addCustomer")
     public String processAddCustomer(@ModelAttribute @Valid Customer customer, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            model.addAttribute("loginName", loginName);
             model.addAttribute("headerMessage", "Dodaj nowego klienta");
             model.addAttribute("disabledParam", "false");
             model.addAttribute("submitBtnVisibleParam", "visible");
@@ -84,7 +69,6 @@ public class CustomerController {
     //edit a customer
     @GetMapping(path = "/editCustomer/{id}")
     public String initiateEditCustomer(Model model, @PathVariable long id) {
-        model.addAttribute("loginName", loginName);
         model.addAttribute("customer", customerRepository.findById(id).orElse(null));
         model.addAttribute("headerMessage", "Edytuj dane klienta");
         model.addAttribute("disabledParam", "false");
@@ -96,7 +80,6 @@ public class CustomerController {
     @PostMapping(path = "/editCustomer/{id}")
     public String processEditCustomer(@ModelAttribute @Valid Customer customer, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            model.addAttribute("loginName", loginName);
             model.addAttribute("headerMessage", "Edytuj dane klienta");
             model.addAttribute("disabledParam", "false");
             model.addAttribute("submitBtnVisibleParam", "visible");
@@ -111,7 +94,6 @@ public class CustomerController {
     //delete a customer
     @GetMapping(path = "/deleteCustomer/{id}")
     public String initiateDeleteCustomer(Model model, @PathVariable long id) {
-        model.addAttribute("loginName", loginName);
         model.addAttribute("customer", customerRepository.findById(id).orElse(null));
         model.addAttribute("headerMessage", "Potwierdź usunięcie danych klienta");
         model.addAttribute("disabledParam", "true");

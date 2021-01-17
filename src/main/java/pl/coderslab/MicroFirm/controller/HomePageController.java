@@ -11,10 +11,6 @@ public class HomePageController {
 
     @GetMapping(path = "")
     public String home(Model model){
-
-        String loginName = "JakiśTamUser";
-
-        model.addAttribute("loginName", loginName);
         return "/home";
     }
 

@@ -18,12 +18,8 @@ public class ProductController {
         this.productRepository = productRepository;
     }
 
-    //    private User getLoggedUser??????????????????????
-    String loginName = "JakiśTamUser";
-
     @GetMapping(path = "/showAllProducts")
     public String showAllProducts(Model model) {
-        model.addAttribute("loginName", loginName);
         model.addAttribute("allProducts", productRepository.findAll());
         return "/product/allProducts";
     }
@@ -31,10 +27,8 @@ public class ProductController {
     //show a product
     @GetMapping(path = "/showProduct/{id}")
     public String showProduct(Model model, @PathVariable long id) {
-        model.addAttribute("loginName", loginName);
         model.addAttribute("product", productRepository.findById(id).orElse(null));
         model.addAttribute("headerMessage", "Dane produktu");
-
         model.addAttribute("disabledParam", "true");
         model.addAttribute("submitBtnVisibleParam", "invisible");
         model.addAttribute("editBtnVisibleParam", "visible");
@@ -45,7 +39,6 @@ public class ProductController {
     //add a product
     @GetMapping(path = "/addProduct")
     public String initiateAddProduct(Model model) {
-        model.addAttribute("loginName", loginName);
         model.addAttribute("product", new Product());
         model.addAttribute("headerMessage", "Dodaj nowy produkt");
         model.addAttribute("disabledParam", "false");
@@ -57,7 +50,6 @@ public class ProductController {
     @PostMapping(path = "/addProduct")
     public String processAddProduct(@ModelAttribute @Valid Product product, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            model.addAttribute("loginName", loginName);
             model.addAttribute("headerMessage", "Dodaj nowy produkt");
             model.addAttribute("disabledParam", "false");
             model.addAttribute("submitBtnVisibleParam", "visible");
@@ -72,7 +64,6 @@ public class ProductController {
     //edit a product
     @GetMapping(path = "/editProduct/{id}")
     public String initiateEditProduct(Model model, @PathVariable long id) {
-        model.addAttribute("loginName", loginName);
         model.addAttribute("product", productRepository.findById(id).orElse(null));
         model.addAttribute("headerMessage", "Edytuj dane produktu");
         model.addAttribute("disabledParam", "false");
@@ -84,7 +75,6 @@ public class ProductController {
     @PostMapping(path = "/editProduct/{id}")
     public String processEditProduct(@ModelAttribute @Valid Product product, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            model.addAttribute("loginName", loginName);
             model.addAttribute("headerMessage", "Edytuj dane produktu");
             model.addAttribute("disabledParam", "false");
             model.addAttribute("submitBtnVisibleParam", "visible");
@@ -99,7 +89,6 @@ public class ProductController {
     //delete a product
     @GetMapping(path = "/deleteProduct/{id}")
     public String initiateDeleteProduct(Model model, @PathVariable long id) {
-        model.addAttribute("loginName", loginName);
         model.addAttribute("product", productRepository.findById(id).orElse(null));
         model.addAttribute("headerMessage", "Potwierdź usunięcie produktu");
         model.addAttribute("disabledParam", "true");
