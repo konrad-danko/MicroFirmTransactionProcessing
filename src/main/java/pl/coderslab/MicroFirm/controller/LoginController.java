@@ -65,7 +65,11 @@ public class LoginController {
 
     //edit password
     @GetMapping(path = "/editPassword")
-    public String initiateEditPassword(Model model){
+    public String initiateEditPassword(Model model, HttpServletRequest request){
+        HttpSession session = request.getSession();
+        User loggedUser = (User)session.getAttribute("loggedUser");
+        String loginName = loggedUser.getLoginName();
+        model.addAttribute("loginName", loginName);
         model.addAttribute("headerMessage", "Zmień hasło do aplikacji");
         return "/login/formEditPassword";
     }
@@ -75,13 +79,9 @@ public class LoginController {
         String loginName = request.getParameter("loginName");
         String oldPassword = request.getParameter("oldPassword");
         String newPassword = request.getParameter("newPassword");
-
-        HttpSession session = request.getSession();
-        User loggedUser = (User)session.getAttribute("loggedUser");
-
         Optional<User> optionalUser = userRepository.findFirstByLoginName(loginName);
 
-        if (optionalUser.isEmpty() || !optionalUser.get().getId().equals(loggedUser.getId()) || !BCrypt.checkpw(oldPassword, optionalUser.get().getPassword()) || newPassword.isEmpty()){
+        if (!BCrypt.checkpw(oldPassword, optionalUser.get().getPassword()) || newPassword.isEmpty()){
             model.addAttribute("headerMessage", "Błędne dane logowania, spróbuj ponownie");
             return "/login/formEditPassword";
         }

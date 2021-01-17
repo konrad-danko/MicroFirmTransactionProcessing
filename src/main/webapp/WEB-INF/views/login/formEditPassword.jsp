@@ -24,7 +24,7 @@
                 <br>
                 <div class="form-group">
                     <label for="loginName">Nazwa użytkownika:</label>
-                    <input type="text" name="loginName" id="loginName" class="form-control"  placeholder="Wpisz nazwę użytkownika">
+                    <input type="text" name="loginName" id="loginName" class="form-control"  value="${loginName}" readonly>
                 </div>
                 <div class="form-group">
                     <label for="oldPassword">Dotychczasowe hasło:</label>

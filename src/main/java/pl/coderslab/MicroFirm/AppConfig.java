@@ -1,5 +1,6 @@
 package pl.coderslab.MicroFirm;
 
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -12,6 +13,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.LocaleContextResolver;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
+import pl.coderslab.MicroFirm.filters.AdminFilter;
 
 import java.util.HashSet;
 import java.util.Locale;
@@ -23,18 +25,27 @@ import java.util.Set;
 @EnableJpaRepositories(basePackages = "pl.coderslab.MicroFirm.repository")
 public class AppConfig {
 
-    @Bean(name = "localeResolver")
+/*    @Bean(name = "localeResolver")
     public LocaleContextResolver getLocaleContextResolver() {
         SessionLocaleResolver localeResolver = new SessionLocaleResolver();
         localeResolver.setDefaultLocale(new Locale("pl", "PL"));
         return localeResolver;
-    }
-    @Bean
+    }*/
+/*    @Bean
     public MessageSource messageSource(){
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
         messageSource.setBasename("classpath:validationMessages");
         messageSource.setDefaultEncoding("UTF-8");
         return messageSource;
+    }*/
+
+    @Bean
+    public FilterRegistrationBean<AdminFilter> adminFilter(){
+        FilterRegistrationBean<AdminFilter> registrationBean = new FilterRegistrationBean<>();
+        registrationBean.setFilter(new AdminFilter());
+        registrationBean.addUrlPatterns("/user/*");
+        registrationBean.addUrlPatterns("/firmData/*");
+        return registrationBean;
     }
 
     public Set<Converter> getConverters() {

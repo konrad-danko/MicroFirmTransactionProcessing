@@ -1,7 +1,6 @@
 package pl.coderslab.MicroFirm.filters;
 
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
+import pl.coderslab.MicroFirm.model.User;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -9,10 +8,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@Component
-@Order(1)
-//In the example below, our filter is registered by default for all the URL's in our application.
-public class LoginFilter implements Filter {
+//@WebFilter(filterName = "AdminFilter")
+public class AdminFilter implements Filter {
     public void init(FilterConfig config) throws ServletException {
     }
     public void destroy() {
@@ -25,13 +22,12 @@ public class LoginFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) resp;
 
         HttpSession session = request.getSession();
-        Object loggedUser = session.getAttribute("loggedUser");
-        if (loggedUser !=null) {
+        User loggedUser = (User)session.getAttribute("loggedUser");
+
+        if ("admin".equals(loggedUser.getLoginName())) {
             chain.doFilter(req, resp);
         } else {
-            request.getRequestDispatcher("/login/login").forward(request, response);  //wg mnie (i też działa)
-            //response.sendRedirect(request.getContextPath() + "/login/login");  //wg Anha (jak najbardziej działa)
-            //response.sendRedirect("/login/login");
+            request.getRequestDispatcher("/home").forward(request, response);
         }
     }
 }
