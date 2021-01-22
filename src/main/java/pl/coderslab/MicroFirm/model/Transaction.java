@@ -16,13 +16,11 @@ public class Transaction {
     private Long id;
 
     @ManyToOne
-    @Column(nullable = false)
     @NotNull(message = "Pole nie może być puste")
     private FirmData firmData;
 
     @ManyToOne
-    @Column(nullable = false)
-    @NotNull(message = "Pole nie może być puste")
+    //@NotNull(message = "Pole nie może być puste")
     private Customer customer;
 
     private boolean issueInvoice;
@@ -30,8 +28,8 @@ public class Transaction {
     private String invoiceNo;  //autoupdated during add operation
 
     public enum PaymentType {
-        GZ("Gotówka, Zapłacono"),
-        GDZ("Gotówka, Do zapłaty"),
+        GZ("Gotówka (zapłacono)"),
+        GDZ("Gotówka (do zapłaty)"),
         P("Przelew");
 
         private String description;
@@ -82,7 +80,7 @@ public class Transaction {
     @PrePersist
     public void prePersist() {
         created = LocalDateTime.now();
-        transactionDate = LocalDate.now();
+        //transactionDate = LocalDate.now();
     }
     @PreUpdate
     public void preUpdate() {

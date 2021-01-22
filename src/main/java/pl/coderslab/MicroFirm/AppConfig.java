@@ -9,6 +9,7 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import pl.coderslab.MicroFirm.converter.LocalDateConverter;
 import pl.coderslab.MicroFirm.filters.AdminFilter;
 
 import java.util.HashSet;
@@ -31,7 +32,7 @@ public class AppConfig {
 
     public Set<Converter> getConverters() {
         Set<Converter> converters = new HashSet<>();
-        //converters.add(new AuthorConverter());
+        //converters.add(new LocalDateConverter());
         return converters;
     }
 

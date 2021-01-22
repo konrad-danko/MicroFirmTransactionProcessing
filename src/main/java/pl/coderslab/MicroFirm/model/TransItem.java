@@ -14,12 +14,10 @@ public class TransItem {
     private Long id;
 
     @ManyToOne
-    @Column(nullable = false)
     @NotNull
     private Transaction transaction;
 
     @ManyToOne
-    @Column(nullable = false)
     @NotNull
     private Product product;
 
