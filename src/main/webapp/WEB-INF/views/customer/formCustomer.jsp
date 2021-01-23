@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
 
 <html>
 <head>
@@ -56,16 +57,30 @@
                 </div>
                 <br>
                 <br>
-                <div class="ml-3">
-                    <p>Utworzono ${customer.created.toLocalDate()} ${customer.created.toLocalTime()} przez ${customer.createdByUser.getLoginName()}</p>
-                    <p>Edytowano ${customer.updated.toLocalDate()} ${customer.updated.toLocalTime()} przez ${customer.updatedByUser.getLoginName()}</p>
-                </div>
-                <br>
-                <div class="form-group mb-4">
-                    <a href="/customer/showAllCustomers" class="btn btn-primary mx-3">Wróć do listy klientów</a>
-                    <a href="/customer/editCustomer/${customer.id}" class="btn btn-warning mx-3 ${editBtnVisibleParam}">Edytuj</a>
-                    <a href="/customer/deleteCustomer/${customer.id}" class="btn btn-danger mx-3 ${delBtnVisibleParam}">Usuń</a>
-                    <input type="submit" value="Zatwierdź" class="btn btn-success mx-3 ${submitBtnVisibleParam}">
+                <div class="d-flex mb-4">
+                    <div class="form-group">
+                        <a href="/customer/showAllCustomers" class="btn btn-primary mx-3">Wróć do listy klientów</a>
+                        <a href="/customer/editCustomer/${customer.id}" class="btn btn-warning mx-3 ${editBtnVisibleParam}">Edytuj</a>
+                        <a href="/customer/deleteCustomer/${customer.id}" class="btn btn-danger mx-3 ${delBtnVisibleParam}">Usuń</a>
+                        <input type="submit" value="Zatwierdź" class="btn btn-success mx-3 ${submitBtnVisibleParam}">
+                    </div>
+
+                    <div class="mx-3">
+                        <div>
+                            <c:if test="${not empty customer.created}">
+                                <fmt:parseDate value="${customer.created}" pattern="yyyy-MM-dd'T'HH:mm:ss" var="originalCreated"/>
+                                <fmt:formatDate value="${originalCreated}" var="formattedCreated" pattern="dd.MM.yyyy 'o' HH:mm:ss"/>
+                                Utworzono ${formattedCreated} przez ${customer.createdByUser.getLoginName()}
+                            </c:if>
+                        </div>
+                        <div>
+                            <c:if test="${not empty customer.updated}">
+                                <fmt:parseDate value="${customer.updated}" pattern="yyyy-MM-dd'T'HH:mm:ss" var="originalUpdated"/>
+                                <fmt:formatDate value="${originalUpdated}" var="formattedUpdated" pattern="dd.MM.yyyy 'o' HH:mm:ss"/>
+                                Edytowano ${formattedUpdated} przez ${customer.updatedByUser.getLoginName()}
+                            </c:if>
+                        </div>
+                    </div>
                 </div>
 
                 <form:hidden path="createdByUser"/>

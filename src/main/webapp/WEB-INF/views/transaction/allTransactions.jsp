@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
 
 <html>
 <head>
@@ -32,7 +33,7 @@
                     <th class="text-right">Netto</th>
                     <th class="text-right">VAT</th>
                     <th class="text-right">Brutto</th>
-                    <th class="text-right">Sposób zapłaty</th>
+                    <th>Sposób zapłaty</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -40,11 +41,15 @@
                     <tr>
                         <td><a href="/transaction/showTransaction/${transaction.id}">${transaction.id}</a></td>
                         <td>${transaction.customer.getCustomerName()}</td>
-                        <td class="text-center">${transaction.transactionDate}</td>
+                        <td class="text-center">
+                            <fmt:parseDate value="${transaction.transactionDate}" pattern="yyyy-MM-dd" var="originalTransactionDate"/>
+                            <fmt:formatDate value="${originalTransactionDate}" var="formattedTransactionDate" pattern="dd.MM.yyyy"/>
+                            ${formattedTransactionDate}
+                        </td>
                         <td class="text-right">${transaction.totalNetAmount}</td>
                         <td class="text-right">${transaction.totalVatAmount}</td>
                         <td class="text-right">${transaction.totalGrossAmount}</td>
-                        <td class="text-right">${transaction.paymentType.getDescription()}</td>
+                        <td>${transaction.paymentType.getDescription()}</td>
                     </tr>
                 </c:forEach>
                 </tbody>

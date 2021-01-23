@@ -29,7 +29,7 @@ public class Transaction {
 
     public enum PaymentType {
         GZ("Gotówka (zapłacono)"),
-        GDZ("Gotówka (do zapłaty)"),
+        GDZ("Gotówka (termin)"),
         P("Przelew");
 
         private String description;

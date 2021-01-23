@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
 
 <html>
 <head>
@@ -50,16 +51,30 @@
                 </div>
                 <br>
                 <br>
-                <div class="ml-3">
-                    <p>Utworzono ${product.created.toLocalDate()} ${product.created.toLocalTime()} przez ${product.createdByUser.getLoginName()}</p>
-                    <p>Edytowano ${product.updated.toLocalDate()} ${product.updated.toLocalTime()} przez ${product.updatedByUser.getLoginName()}</p>
-                </div>
-                <br>
-                <div class="form-group mb-4">
-                    <a href="/product/showAllProducts" class="btn btn-primary mx-3">Wróć do listy produktów</a>
-                    <a href="/product/editProduct/${product.id}" class="btn btn-warning mx-3 ${editBtnVisibleParam}">Edytuj</a>
-                    <a href="/product/deleteProduct/${product.id}" class="btn btn-danger mx-3 ${delBtnVisibleParam}">Usuń</a>
-                    <input type="submit" value="Zatwierdź" class="btn btn-success mx-3 ${submitBtnVisibleParam}">
+                <div class="d-flex mb-4">
+                    <div class="form-group">
+                        <a href="/product/showAllProducts" class="btn btn-primary mx-3">Wróć do listy produktów</a>
+                        <a href="/product/editProduct/${product.id}" class="btn btn-warning mx-3 ${editBtnVisibleParam}">Edytuj</a>
+                        <a href="/product/deleteProduct/${product.id}" class="btn btn-danger mx-3 ${delBtnVisibleParam}">Usuń</a>
+                        <input type="submit" value="Zatwierdź" class="btn btn-success mx-3 ${submitBtnVisibleParam}">
+                    </div>
+
+                    <div class="mx-3">
+                        <div>
+                            <c:if test="${not empty product.created}">
+                                <fmt:parseDate value="${product.created}" pattern="yyyy-MM-dd'T'HH:mm:ss" var="originalCreated"/>
+                                <fmt:formatDate value="${originalCreated}" var="formattedCreated" pattern="dd.MM.yyyy 'o' HH:mm:ss"/>
+                                Utworzono ${formattedCreated} przez ${product.createdByUser.getLoginName()}
+                            </c:if>
+                        </div>
+                        <div>
+                            <c:if test="${not empty product.updated}">
+                                <fmt:parseDate value="${product.updated}" pattern="yyyy-MM-dd'T'HH:mm:ss" var="originalUpdated"/>
+                                <fmt:formatDate value="${originalUpdated}" var="formattedUpdated" pattern="dd.MM.yyyy 'o' HH:mm:ss"/>
+                                Edytowano ${formattedUpdated} przez ${product.updatedByUser.getLoginName()}
+                            </c:if>
+                        </div>
+                    </div>
                 </div>
 
                 <form:hidden path="createdByUser"/>

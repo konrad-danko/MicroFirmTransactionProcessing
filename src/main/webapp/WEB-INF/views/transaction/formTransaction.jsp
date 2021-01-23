@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
 
 <html>
 <head>
@@ -45,30 +46,11 @@
                         </label>
                         <form:input path="invoiceNo" id="invoiceNo" class="form-control" readonly="true"/>
                     </div>
-
-
-<%--                    <div class="form-group mx-1">
-                        <label for="paymentType">Sposób zapłaty 1:</label>
-                        <form:select id="paymentType" path="paymentType" class="form-control" disabled="${disabledParam}">
-                            <form:option label="${transaction.paymentType.getDescription()}" value="${transaction.paymentType.ordinal()}"/>
-                            <c:forEach items="${allPaymentTypes}" var="paymentType">
-                                <form:option label="${paymentType.getDescription()}" value="${paymentType.ordinal()}"/>
-                            </c:forEach>
-                        </form:select>
-                    </div>--%>
                     <div class="form-group mx-1">
                         <label for="paymentType">Sposób zapłaty:</label>
                         <form:select id="paymentType" path="paymentType" items="${allPaymentTypes}" class="form-control" disabled="${disabledParam}" itemLabel="description"  />  <%--itemValue="${transaction.paymentType.ordinal()}"--%>
                         <form:errors path="paymentType" class="text-danger"/>
                     </div>
-<%--                    <div class="form-group mx-1">
-                        <label for="paymentType">RR 3:</label>
-                        <form:select id="paymentType" path="paymentType" items="${allPaymentTypes}" class="form-control" disabled="${disabledParam}"/>
-                        <form:errors path="paymentType" class="text-danger"/>
-                    </div>--%>
-
-
-
                     <div class="form-group mx-1" style="width:10em">
                         <label for="paymentDueDate">Data płatności:</label>
                         <form:input type="date" path="paymentDueDate" id="paymentDueDate" class="form-control" disabled="${disabledParam}" value="${transaction.paymentDueDate}"/>
@@ -110,10 +92,15 @@
 
                     <div class="ml-4">
                         <c:if test="${not empty transaction.created}">
-                            Utworzono ${transaction.created.toLocalDate()} ${transaction.created.toLocalTime()} przez ${transaction.createdByUser.getLoginName()},&nbsp&nbsp&nbsp
+                            <fmt:parseDate value="${transaction.created}" pattern="yyyy-MM-dd'T'HH:mm:ss" var="originalCreated"/>
+                            <fmt:formatDate value="${originalCreated}" var="formattedCreated" pattern="dd.MM.yyyy 'o' HH:mm:ss"/>
+                            Utworzono ${formattedCreated} przez ${transaction.createdByUser.getLoginName()}
                         </c:if>
                         <c:if test="${not empty transaction.updated}">
-                            Edytowano ${transaction.updated.toLocalDate()} ${transaction.updated.toLocalTime()} przez ${transaction.updatedByUser.getLoginName()}
+                            <fmt:parseDate value="${transaction.updated}" pattern="yyyy-MM-dd'T'HH:mm:ss" var="originalUpdated"/>
+                            <fmt:formatDate value="${originalUpdated}" var="formattedUpdated" pattern="dd.MM.yyyy 'o' HH:mm:ss"/>
+                            ,&nbsp&nbsp&nbsp
+                            Edytowano ${formattedUpdated} przez ${transaction.updatedByUser.getLoginName()}
                         </c:if>
                     </div>
                 </div>
