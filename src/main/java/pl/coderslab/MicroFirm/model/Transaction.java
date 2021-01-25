@@ -50,9 +50,8 @@ public class Transaction {
     @FutureOrPresent (message = "Data nie może być z przeszłości")
     private LocalDate paymentDueDate;
 
-    private LocalDate transactionDate; //autoupdated during add operation
+    private LocalDate transactionDate;
 
-    @FutureOrPresent (message = "Data nie może być z przeszłości")
     private LocalDate sellDate;
 
     @Column(nullable = false)
@@ -80,7 +79,6 @@ public class Transaction {
     @PrePersist
     public void prePersist() {
         created = LocalDateTime.now();
-        //transactionDate = LocalDate.now();
     }
     @PreUpdate
     public void preUpdate() {

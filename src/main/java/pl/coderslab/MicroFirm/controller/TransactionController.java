@@ -62,6 +62,7 @@ public class TransactionController {
     @GetMapping(path = "/showTransaction/{id}")
     public String showTransaction(Model model, @PathVariable long id) {
         model.addAttribute("transaction", transactionRepository.findById(id).orElse(null));
+        model.addAttribute("allTransItems", transItemRepository.findAllByTransaction_Id(id));
         model.addAttribute("headerMessage", "Szczegóły transakcji");
         model.addAttribute("disabledParam", "true");   // powinno być: "true"
         model.addAttribute("submitBtnVisibleParam", "invisible");

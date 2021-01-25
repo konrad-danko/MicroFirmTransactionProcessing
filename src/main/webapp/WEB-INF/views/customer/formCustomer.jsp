@@ -19,12 +19,13 @@
 
     <div class="d-flex justify-content-center">
         <div style="width:90%">
-            <h2>${headerMessage}</h2>
+            <h2>${headerMessage}${empty customer.id ? "" : " nr "}${customer.id}</h2>
             <form:form modelAttribute="customer" method="post" class="border rounded shadow-lg">
                 <div class="d-flex mt-3">
-                    <div class="form-group mx-2" style="width:3em">
-                        <label for="id">Id:</label>
-                        <form:input path="id" id="id" class="form-control" disabled="true"/>
+                    <div class="form-group mx-2">
+                        <label for="customerNIP">NIP:</label>
+                        <form:input path="customerNIP" id="customerNIP" class="form-control" disabled="${disabledParam}"/>
+                        <form:errors path="customerNIP" class="text-danger"/>
                     </div>
                     <div class="form-group mx-2 flex-grow-1">
                         <label for="customerName">Nazwa:</label>
@@ -34,11 +35,6 @@
                 </div>
                 <br>
                 <div class="d-flex">
-                    <div class="form-group mx-2">
-                        <label for="customerNIP">NIP:</label>
-                        <form:input path="customerNIP" id="customerNIP" class="form-control" disabled="${disabledParam}"/>
-                        <form:errors path="customerNIP" class="text-danger"/>
-                    </div>
                     <div class="form-group mx-2">
                         <label for="customerPostCode">Kod pocztowy:</label>
                         <form:input path="customerPostCode" id="customerPostCode" class="form-control" disabled="${disabledParam}"/>
@@ -83,6 +79,7 @@
                     </div>
                 </div>
 
+                <form:hidden path="id"/>
                 <form:hidden path="createdByUser"/>
                 <form:hidden path="updatedByUser"/>
                 <form:hidden path="created"/>

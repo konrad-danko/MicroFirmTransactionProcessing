@@ -19,13 +19,9 @@
 
     <div class="d-flex justify-content-center">
         <div style="width:90%">
-            <h2>${headerMessage}</h2>
+            <h2>${headerMessage}${empty product.id ? "" : " nr "}${product.id}</h2>
             <form:form modelAttribute="product" method="post" class="border rounded shadow-lg">
                 <div class="d-flex mt-3">
-                    <div class="form-group mx-2" style="width:3em">
-                        <label for="id">Id:</label>
-                        <form:input path="id" id="id" class="form-control" disabled="true"/>
-                    </div>
                     <div class="form-group mx-2 flex-grow-1">
                         <label for="productName">Nazwa:</label>
                         <form:input path="productName" id="productName" class="form-control" disabled="${disabledParam}"/>
@@ -77,6 +73,7 @@
                     </div>
                 </div>
 
+                <form:hidden path="id"/>
                 <form:hidden path="createdByUser"/>
                 <form:hidden path="updatedByUser"/>
                 <form:hidden path="created"/>
