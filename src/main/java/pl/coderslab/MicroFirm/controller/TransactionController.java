@@ -17,6 +17,7 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Controller
@@ -42,6 +43,18 @@ public class TransactionController {
         return (User)session.getAttribute("loggedUser");
     }
 
+    private void setFormattedCreatedAndUpdatedAsModelAttributes(Transaction transaction, Model model){
+        long id = transaction.getId();
+        Transaction transactionFromDB = transactionRepository.findById(id).orElse(null);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm:ss");
+        if(transactionFromDB.getCreated()!=null){
+            model.addAttribute("formattedCreated", formatter.format(transactionFromDB.getCreated()));
+        }
+        if(transactionFromDB.getUpdated()!=null){
+            model.addAttribute("formattedUpdated", formatter.format(transactionFromDB.getUpdated()));
+        }
+    }
+
     @ModelAttribute("allCustomers")
     public List<Customer> getAllCustomers(){
         return customerRepository.findAll();
@@ -61,7 +74,9 @@ public class TransactionController {
     //show a transaction
     @GetMapping(path = "/showTransaction/{id}")
     public String showTransaction(Model model, @PathVariable long id) {
-        model.addAttribute("transaction", transactionRepository.findById(id).orElse(null));
+        Transaction transaction = transactionRepository.findById(id).orElse(null);
+        setFormattedCreatedAndUpdatedAsModelAttributes(transaction, model);
+        model.addAttribute("transaction", transaction);
         model.addAttribute("allTransItems", transItemRepository.findAllByTransaction_Id(id));
         model.addAttribute("headerMessage", "Szczegóły transakcji");
         model.addAttribute("disabledParam", "true");   // powinno być: "true"
@@ -80,7 +95,7 @@ public class TransactionController {
         transaction.setSellDate(LocalDate.now());
         transaction.setPaymentDueDate(LocalDate.now());
         transaction.setIssueInvoice(false);
-        transaction.setInvoiceNo("145/01/21");    // !!!!!!!!dorobić metodę na numerację faktur
+        transaction.setInvoiceNo("145/01/21");    // !!!!!!!!dorobić metodę na numerację faktur !!!!!!!!!
         transaction.setPaymentType(Transaction.PaymentType.GZ);
         transaction.setTotalNetAmount(new BigDecimal("0.00"));
         transaction.setTotalVatAmount(new BigDecimal("0.00"));
@@ -109,7 +124,45 @@ public class TransactionController {
             transaction.setInvoiceNo(null);
         }
         transactionRepository.save(transaction);
-        return "redirect:/transaction/showAllTransactions";
+        return "redirect:/transaction/showTransaction/"+transaction.getId();
+    }
+
+    //edit a transaction
+    @GetMapping(path = "/editTransaction/{id}")
+    public String initiateEditTransaction(Model model, @PathVariable long id) {
+        Transaction transaction = transactionRepository.findById(id).orElse(null);
+        if(transaction.getInvoiceNo()==null){
+            transaction.setInvoiceNo("145/01/21");    // !!!!!!!!dorobić metodę na numerację faktur !!!!!!!!!
+        }
+        setFormattedCreatedAndUpdatedAsModelAttributes(transaction, model);
+        model.addAttribute("transaction", transaction);
+        model.addAttribute("headerMessage", "Edytuj dane transakcji");
+        model.addAttribute("disabledParam", "false");
+        model.addAttribute("submitBtnVisibleParam", "visible");
+        model.addAttribute("editBtnVisibleParam", "invisible");
+        model.addAttribute("delBtnVisibleParam", "invisible");
+        return "/transaction/formTransaction";
+    }
+    @PostMapping(path = "/editTransaction/{id}")
+    public String processEditTransaction(@ModelAttribute @Valid Transaction transaction, BindingResult result, Model model, HttpServletRequest request) {
+        if (result.hasErrors()) {
+            setFormattedCreatedAndUpdatedAsModelAttributes(transaction, model);
+            model.addAttribute("headerMessage", "Edytuj dane transakcji");
+            model.addAttribute("disabledParam", "false");
+            model.addAttribute("submitBtnVisibleParam", "visible");
+            model.addAttribute("editBtnVisibleParam", "invisible");
+            model.addAttribute("delBtnVisibleParam", "invisible");
+            return "/transaction/formTransaction";
+        }
+        transaction.setUpdatedByUser(getLoggedUser(request));
+        if(!transaction.isIssueInvoice()){
+            transaction.setInvoiceNo(null);
+        }
+        //poniższa linijka jest dlatego, że przeglądarka obcina sekundy z daty "created"
+        //i dlatego muszę pobierać tą datę z bazy i dopisać do transakcji przed ponownym zapisem do bazy
+        transaction.setCreated(transactionRepository.findById(transaction.getId()).get().getCreated());
+        transactionRepository.save(transaction);
+        return "redirect:/transaction/showTransaction/"+transaction.getId();
     }
 
 

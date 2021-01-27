@@ -150,16 +150,12 @@
 
                     <div class="mx-3">
                         <div>
-                            <c:if test="${not empty transaction.created}">
-                                <fmt:parseDate value="${transaction.created}" pattern="yyyy-MM-dd'T'HH:mm:ss" var="originalCreated"/>
-                                <fmt:formatDate value="${originalCreated}" var="formattedCreated" pattern="dd.MM.yyyy 'o' HH:mm:ss"/>
+                            <c:if test="${not empty formattedCreated}">
                                 Utworzono ${formattedCreated} przez ${transaction.createdByUser.getLoginName()}
                             </c:if>
                         </div>
                         <div>
-                            <c:if test="${not empty transaction.updated}">
-                                <fmt:parseDate value="${transaction.updated}" pattern="yyyy-MM-dd'T'HH:mm:ss" var="originalUpdated"/>
-                                <fmt:formatDate value="${originalUpdated}" var="formattedUpdated" pattern="dd.MM.yyyy 'o' HH:mm:ss"/>
+                            <c:if test="${not empty formattedUpdated}">
                                 Edytowano ${formattedUpdated} przez ${transaction.updatedByUser.getLoginName()}
                             </c:if>
                         </div>
@@ -175,8 +171,6 @@
                 <form:hidden path="paymentAmountInWords"/>
                 <form:hidden path="createdByUser"/>
                 <form:hidden path="updatedByUser"/>
-                <form:hidden path="created"/>
-                <form:hidden path="updated"/>
             </form:form>
         </div>
     </div>
