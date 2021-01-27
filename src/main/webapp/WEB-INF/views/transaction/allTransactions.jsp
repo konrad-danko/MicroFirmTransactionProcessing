@@ -29,6 +29,7 @@
                 <tr>
                     <th>Id</th>
                     <th>Klient</th>
+                    <th class="text-center">Faktura</th>
                     <th class="text-center">Data transakcji</th>
                     <th class="text-right">Netto</th>
                     <th class="text-right">VAT</th>
@@ -41,6 +42,7 @@
                     <tr>
                         <td><a href="/transaction/showTransaction/${transaction.id}">${transaction.id}</a></td>
                         <td>${transaction.customer.getCustomerName()}</td>
+                        <td class="text-center">${transaction.invoiceNo}</td>
                         <td class="text-center">
                             <fmt:parseDate value="${transaction.transactionDate}" pattern="yyyy-MM-dd" var="originalTransactionDate"/>
                             <fmt:formatDate value="${originalTransactionDate}" var="formattedTransactionDate" pattern="dd.MM.yyyy"/>

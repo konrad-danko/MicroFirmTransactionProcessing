@@ -105,6 +105,9 @@ public class TransactionController {
             return "/transaction/formTransaction";
         }
         transaction.setCreatedByUser(getLoggedUser(request));
+        if(!transaction.isIssueInvoice()){
+            transaction.setInvoiceNo(null);
+        }
         transactionRepository.save(transaction);
         return "redirect:/transaction/showAllTransactions";
     }

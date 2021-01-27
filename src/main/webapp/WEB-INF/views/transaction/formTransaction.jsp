@@ -22,15 +22,16 @@
             <h5>${headerMessage}${empty transaction.id ? "" : " nr "}${transaction.id}</h5>
             <form:form modelAttribute="transaction" method="post" class="border rounded shadow-lg">
 
-                <div class="d-flex justify-content-center"> <%--tu damy tabelkę z inputami--%>
-                    <div class="m-3" style="width:100%">
+                <%--Tabelka z inputami--%>
+                <div class="d-flex justify-content-start">
+                    <div class="m-3" style="width:auto">
                         <table class="table table-bordered table-sm">
                             <thead class="thead-light">
                             <tr>
                                 <th class="text-center">Data transakcji</th>
                                 <th class="text-center">Data sprzedaży</th>
                                 <th>Klient</th>
-                                <th class="text-center" colspan="4">Faktura</th>
+                                <th class="text-center">Faktura</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -48,10 +49,14 @@
                                     </form:select>
                                 </td>
                                 <td class="text-center align-middle">
-                                    <form:checkbox path="issueInvoice" disabled="${disabledParam}"/>
-                                </td>
-                                <td class="text-center align-middle">
-                                        ${transaction.invoiceNo}
+                                    <div class="d-flex">
+                                        <div class="mx-3" style="margin-top: 12px">
+                                            <form:checkbox path="issueInvoice" disabled="${disabledParam}" id="issueInvoiceCheckboxElement"/>
+                                        </div>
+                                        <div class="border rounded" style="height: 38px; background-color: #e9ecef; width: 100px;">
+                                            <div class="mx-2 mt-2 d-none" id="invoiceNoDivElement">${transaction.invoiceNo}</div>
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
                             </tbody>
@@ -59,17 +64,56 @@
                     </div>
                 </div>
 
-                <div class="d-flex">
-                    <%@include file="../transItem/allTransItems.jsp"%>
-                        <%--tu dajemy transitems--%>
+                <%--Tabelka z transitems--%>
+                <div class="d-flex justify-content-center">
+                    <div class="m-3" style="width:100%">
+                        <table class="table table-bordered table-hover table-sm">
+                            <thead class="thead-light">
+                            <tr>
+                                <th class="align-middle">Id</th>
+                                <th class="align-middle">Nazwa produktu</th>
+                                <th class="text-right align-middle">Ilość (szt.)</th>
+                                <th class="text-center align-middle">Cena netto (1000 szt.)</th>
+                                <th class="text-right align-middle">Kwota netto</th>
+                                <th class="text-right align-middle">Kwota VAT</th>
+                                <th class="text-right align-middle">Kwota brutto</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <c:forEach items="${allTransItems}" var="transItem">
+                                <tr>
+                                    <td>${transItem.id}</td>
+                                    <td>${transItem.product.getProductName()}</td>
+                                    <td class="text-right">${transItem.quantity}</td>
+                                    <td class="text-right">${transItem.netPricePer1000}</td>
+                                    <td class="text-right">${transItem.netAmount}</td>
+                                    <td class="text-right">${transItem.vatAmount}</td>
+                                    <td class="text-right">${transItem.grossAmount}</td>
+                                </tr>
+                            </c:forEach>
+                            </tbody>
+                            <tfoot>
+                            <tr class="font-weight-bold" style="background-color: #e9ecef">
+                                <td class="text-left" colspan="3">
+                                    <a href="/transItem/addTransItem" class="badge badge-success ml-3">Dodaj nowy</a>
+                                </td>
+                                <td class="text-right">Razem:</td>
+                                <td class="text-right">${transaction.totalNetAmount}</td>
+                                <td class="text-right">${transaction.totalVatAmount}</td>
+                                <td class="text-right">${transaction.totalGrossAmount}</td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
                 </div>
 
-                <div class="d-flex justify-content-centerQQQQ"> <%--tu damy tabelkę z inputami--%>
-                    <div class="m-3" style="width: auto">
+                <%--Tabelka z detalami płatności--%>
+                <div class="d-flex justify-content-end">
+                    <div class="m-3" >
                         <table class="table table-bordered table-sm">
                             <thead class="thead-light">
                             <tr>
-                                <th>Sposób zapłaty</th>
+                                <th class="text-center">Sposób zapłaty</th>
                                 <th class="text-center">Data płatności</th>
                                 <th class="text-center">Kwota do zapłaty (słownie)</th>
                             </tr>
@@ -84,9 +128,9 @@
                                     <form:input type="date" path="paymentDueDate" class="text-center form-control" disabled="${disabledParam}" value="${transaction.paymentDueDate}"/>
                                     <form:errors path="paymentDueDate" class="text-danger"/>
                                 </td>
-                                <td class="text-center align-middle">
-                                    <div class="mx-3">
-                                            ${transaction.paymentAmountInWords}
+                                <td class="align-middle">
+                                    <div class="border rounded" style="height: 38px; background-color: #e9ecef;">
+                                        <div class="mx-2 mt-2">${transaction.paymentAmountInWords}</div>
                                     </div>
                                 </td>
                             </tr>
@@ -95,7 +139,7 @@
                     </div>
                 </div>
 
-
+                <%--Blok z przyciskami i "audit trial-em"--%>
                 <div class="d-flex mb-1">
                     <div class="form-group">
                         <a href="/transaction/showAllTransactions" class="btn btn-primary mx-3">Wróć do listy transakcji</a>
@@ -124,7 +168,7 @@
 
                 <form:hidden path="id"/>
                 <form:hidden path="firmData"/>
-                <form:hidden path="invoiceNo"/>
+                <form:hidden path="invoiceNo" id="invoiceNoHiddenElement"/>
                 <form:hidden path="totalNetAmount"/>
                 <form:hidden path="totalVatAmount"/>
                 <form:hidden path="totalGrossAmount"/>
@@ -137,5 +181,26 @@
         </div>
     </div>
 </div>
+
+<script>
+    const issueInvoiceCheckboxElement = document.getElementById("issueInvoiceCheckboxElement");
+    const invoiceNoDivElement = document.getElementById("invoiceNoDivElement");
+
+    if (issueInvoiceCheckboxElement.checked){
+        invoiceNoDivElement.classList.remove("d-none");
+    } else {
+        invoiceNoDivElement.classList.add("d-none");
+    }
+
+    issueInvoiceCheckboxElement.addEventListener("click", function (){
+        if (issueInvoiceCheckboxElement.checked){
+            invoiceNoDivElement.classList.remove("d-none");
+        } else {
+            invoiceNoDivElement.classList.add("d-none");
+        }
+    });
+
+
+</script>
 </body>
 </html>
