@@ -79,7 +79,7 @@ public class TransactionController {
         model.addAttribute("transaction", transaction);
         model.addAttribute("allTransItems", transItemRepository.findAllByTransaction_Id(id));
         model.addAttribute("headerMessage", "Szczegóły transakcji");
-        model.addAttribute("disabledParam", "true");   // powinno być: "true"
+        model.addAttribute("disabledParam", "true");
         model.addAttribute("submitBtnVisibleParam", "invisible");
         model.addAttribute("editBtnVisibleParam", "visible");
         model.addAttribute("delBtnVisibleParam", "visible");
@@ -110,7 +110,10 @@ public class TransactionController {
         return "/transaction/formTransaction";
     }
     @PostMapping(path = "/addTransaction")
-    public String processAddTransaction(@ModelAttribute @Valid Transaction transaction, BindingResult result, Model model, HttpServletRequest request) {
+    public String processAddTransaction(@ModelAttribute @Valid Transaction transaction,
+                                        BindingResult result,
+                                        Model model,
+                                        HttpServletRequest request) {
         if (result.hasErrors()) {
             model.addAttribute("headerMessage", "Dodaj nową transakcję");
             model.addAttribute("disabledParam", "false");
@@ -136,6 +139,7 @@ public class TransactionController {
         }
         setFormattedCreatedAndUpdatedAsModelAttributes(transaction, model);
         model.addAttribute("transaction", transaction);
+        model.addAttribute("allTransItems", transItemRepository.findAllByTransaction_Id(id));
         model.addAttribute("headerMessage", "Edytuj dane transakcji");
         model.addAttribute("disabledParam", "false");
         model.addAttribute("submitBtnVisibleParam", "visible");
@@ -144,9 +148,14 @@ public class TransactionController {
         return "/transaction/formTransaction";
     }
     @PostMapping(path = "/editTransaction/{id}")
-    public String processEditTransaction(@ModelAttribute @Valid Transaction transaction, BindingResult result, Model model, HttpServletRequest request) {
+    public String processEditTransaction(@ModelAttribute @Valid Transaction transaction,
+                                         BindingResult result,
+                                         Model model,
+                                         HttpServletRequest request,
+                                         @PathVariable long id) {
         if (result.hasErrors()) {
             setFormattedCreatedAndUpdatedAsModelAttributes(transaction, model);
+            model.addAttribute("allTransItems", transItemRepository.findAllByTransaction_Id(id));
             model.addAttribute("headerMessage", "Edytuj dane transakcji");
             model.addAttribute("disabledParam", "false");
             model.addAttribute("submitBtnVisibleParam", "visible");
@@ -163,6 +172,29 @@ public class TransactionController {
         transaction.setCreated(transactionRepository.findById(transaction.getId()).get().getCreated());
         transactionRepository.save(transaction);
         return "redirect:/transaction/showTransaction/"+transaction.getId();
+    }
+
+    //delete a transaction
+    @GetMapping(path = "/deleteTransaction/{id}")
+    public String initiateDeleteTransaction(Model model, @PathVariable long id) {
+        Transaction transaction = transactionRepository.findById(id).orElse(null);
+        setFormattedCreatedAndUpdatedAsModelAttributes(transaction, model);
+        model.addAttribute("transaction", transaction);
+        model.addAttribute("allTransItems", transItemRepository.findAllByTransaction_Id(id));
+        model.addAttribute("headerMessage", "Potwierdź usunięcie transakcji");
+        model.addAttribute("disabledParam", "true");
+        model.addAttribute("submitBtnVisibleParam", "visible");
+        model.addAttribute("editBtnVisibleParam", "invisible");
+        model.addAttribute("delBtnVisibleParam", "invisible");
+        return "/transaction/formTransaction";
+    }
+    @PostMapping(path = "/deleteTransaction/{id}")
+    public String processDeleteTransaction(@ModelAttribute Transaction transaction, @PathVariable long id) {
+        if(transItemRepository.findAllByTransaction_Id(id).size()>0){
+            return "redirect:/transaction/showTransaction/"+transaction.getId();
+        }
+        transactionRepository.delete(transaction);
+        return "redirect:/transaction/showAllTransactions";
     }
 
 
