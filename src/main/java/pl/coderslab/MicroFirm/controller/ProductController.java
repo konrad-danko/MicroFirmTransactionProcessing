@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.coderslab.MicroFirm.model.Product;
 import pl.coderslab.MicroFirm.model.User;
 import pl.coderslab.MicroFirm.repository.ProductRepository;
+import pl.coderslab.MicroFirm.repository.TransItemRepository;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -17,8 +18,10 @@ import javax.validation.Valid;
 public class ProductController {
 
     private final ProductRepository productRepository;
-    public ProductController(ProductRepository productRepository) {
+    private final TransItemRepository transItemRepository;
+    public ProductController(ProductRepository productRepository, TransItemRepository transItemRepository) {
         this.productRepository = productRepository;
+        this.transItemRepository = transItemRepository;
     }
 
     private User getLoggedUser(HttpServletRequest request){
@@ -67,7 +70,7 @@ public class ProductController {
         }
         product.setCreatedByUser(getLoggedUser(request));
         productRepository.save(product);
-        return "redirect:/product/showAllProducts";
+        return "redirect:/product/showProduct/"+product.getId();
     }
 
     //edit a product
@@ -96,7 +99,7 @@ public class ProductController {
         //i dlatego muszę pobierać tą datę z bazy i dopisać do productu przed ponownym zapisem do bazy
         product.setCreated(productRepository.findById(product.getId()).get().getCreated());
         productRepository.save(product);
-        return "redirect:/product/showAllProducts";
+        return "redirect:/product/showProduct/"+product.getId();
     }
 
     //delete a product
@@ -111,9 +114,11 @@ public class ProductController {
         return "/product/formProduct";
     }
     @PostMapping(path = "/deleteProduct/{id}")
-    public String processDeleteProduct(@ModelAttribute Product product) {
-        //tu dopisać kod na sprawdzanie czy produkt nie jest w jakiejś transakcji
-        //productRepository.delete(product);
+    public String processDeleteProduct(@ModelAttribute Product product, @PathVariable long id) {
+        if(transItemRepository.findAllByProduct_Id(id).size()>0){
+            return "redirect:/product/showProduct/"+product.getId();
+        }
+        productRepository.delete(product);
         return "redirect:/product/showAllProducts";
     }
 }

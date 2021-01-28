@@ -9,4 +9,6 @@ import java.util.List;
 public interface TransItemRepository extends JpaRepository<TransItem, Long> {
 
     List<TransItem> findAllByTransaction_Id(long id);
+
+    List<TransItem> findAllByProduct_Id(long id);
 }

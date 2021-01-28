@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.coderslab.MicroFirm.model.Customer;
 import pl.coderslab.MicroFirm.model.User;
 import pl.coderslab.MicroFirm.repository.CustomerRepository;
+import pl.coderslab.MicroFirm.repository.TransactionRepository;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -17,8 +18,10 @@ import javax.validation.Valid;
 public class CustomerController {
 
     private final CustomerRepository customerRepository;
-    public CustomerController(CustomerRepository customerRepository) {
+    private final TransactionRepository transactionRepository;
+    public CustomerController(CustomerRepository customerRepository, TransactionRepository transactionRepository) {
         this.customerRepository = customerRepository;
+        this.transactionRepository = transactionRepository;
     }
 
     private User getLoggedUser(HttpServletRequest request){
@@ -68,7 +71,7 @@ public class CustomerController {
         }
         customer.setCreatedByUser(getLoggedUser(request));
         customerRepository.save(customer);
-        return "redirect:/customer/showAllCustomers";
+        return "redirect:/customer/showCustomer/"+customer.getId();
     }
 
     //edit a customer
@@ -97,7 +100,7 @@ public class CustomerController {
         //i dlatego muszę pobierać tą datę z bazy i dopisać do customera przed ponownym zapisem do bazy
         customer.setCreated(customerRepository.findById(customer.getId()).get().getCreated());
         customerRepository.save(customer);
-        return "redirect:/customer/showAllCustomers";
+        return "redirect:/customer/showCustomer/"+customer.getId();
     }
 
     //delete a customer
@@ -112,9 +115,11 @@ public class CustomerController {
         return "/customer/formCustomer";
     }
     @PostMapping(path = "/deleteCustomer/{id}")
-    public String processDeleteCustomer(@ModelAttribute Customer customer) {
-        //tu dopisać kod na sprawdzanie czy klient nie ma jakiejś transakcji
-        //customerRepository.delete(customer);
+    public String processDeleteCustomer(@ModelAttribute Customer customer, @PathVariable long id) {
+        if(transactionRepository.findAllByCustomer_Id(id).size()>0){
+            return "redirect:/customer/showCustomer/"+customer.getId();
+        }
+        customerRepository.delete(customer);
         return "redirect:/customer/showAllCustomers";
     }
 }

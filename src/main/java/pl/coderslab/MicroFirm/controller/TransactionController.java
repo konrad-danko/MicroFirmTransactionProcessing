@@ -196,12 +196,4 @@ public class TransactionController {
         transactionRepository.delete(transaction);
         return "redirect:/transaction/showAllTransactions";
     }
-
-
-
-
-
-
-
-
 }
