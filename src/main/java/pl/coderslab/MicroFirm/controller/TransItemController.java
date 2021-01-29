@@ -26,15 +26,12 @@ public class TransItemController {
     private final TransItemRepository transItemRepository;
     private final TransactionRepository transactionRepository;
     private final ProductRepository productRepository;
-    private final CustomerRepository customerRepository;
     public TransItemController(TransItemRepository transItemRepository,
                                TransactionRepository transactionRepository,
-                               ProductRepository productRepository,
-                               CustomerRepository customerRepository) {
+                               ProductRepository productRepository) {
         this.transItemRepository = transItemRepository;
         this.transactionRepository = transactionRepository;
         this.productRepository = productRepository;
-        this.customerRepository = customerRepository;
     }
 
     private void setFormattedCreatedAndUpdatedAsModelAttributes(Transaction transaction, Model model){
@@ -47,16 +44,6 @@ public class TransItemController {
         if(transactionFromDB.getUpdated()!=null){
             model.addAttribute("formattedUpdated", formatter.format(transactionFromDB.getUpdated()));
         }
-    }
-
-    @ModelAttribute("allCustomers")
-    public List<Customer> getAllCustomers(){
-        return customerRepository.findAll();
-    }
-
-    @ModelAttribute("allPaymentTypes")
-    public Transaction.PaymentType[] getAllPaymentTypes(){
-        return Transaction.PaymentType.values();
     }
 
     @ModelAttribute("allProducts")

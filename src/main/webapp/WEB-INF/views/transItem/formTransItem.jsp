@@ -20,8 +20,8 @@
     <div class="d-flex justify-content-center">
         <div style="width:100%">
             <h5>${headerMessage}${empty transaction.id ? "" : " nr "}${transaction.id}</h5>
-            <form:form modelAttribute="transaction" method="post" class="border rounded shadow-lg">
-            <%--<form:form modelAttribute="transItem" method="post" class="border rounded shadow-lg">--%>
+            <%--<form:form modelAttribute="transaction" method="post" class="border rounded shadow-lg">--%>
+            <form:form modelAttribute="transItem" method="post" class="border rounded shadow-lg">
 
                 <%--Tabelka z inputami--%>
                 <div class="d-flex justify-content-start">
@@ -102,24 +102,46 @@
                                 </tr>
                             </c:forEach>
                             <tr>
+                                <form:hidden path="id"/>
+                                <form:hidden path="transaction"/>
+
                                 <td></td>
-                                <td>${transItem.product.getProductName()}</td>
-                                <%--<td>
-                                    <form:select path="product" class="form-control" disabled="false">
+                                <%--<td>${transItem.product.getProductName()}</td>--%>
+                                <td>
+                                    <form:select path="product" style="background-color: white" class="form-control-sm" disabled="false">
                                         <form:option label="--Wybierz produkt--" value="0"/>
                                         <form:options items="${allProducts}" itemLabel="productName" itemValue="id"/>
                                     </form:select>
                                     <form:errors path="product" class="text-danger"/>
-                                </td>--%>
-                                <td class="text-right">${transItem.quantity}</td>
-                                <%--<td>
-                                    <form:input type="number" path="quantity" class="text-right form-control" disabled="false" value="${transItem.quantity}"/>
+                                </td>
+
+                                <%--<td class="text-right">${transItem.quantity}</td>--%>
+                                <td class="text-right">
+                                    <form:input path="quantity" type="number" min="1" class="text-right form-control-sm" style="max-width: 120px" readonly="false" value="${transItem.quantity}"/>
                                     <form:errors path="quantity" class="text-danger"/>
-                                </td>--%>
-                                <td class="text-right">${transItem.netPricePer1000}</td>
-                                <td class="text-right">${transItem.netAmount}</td>
-                                <td class="text-right">${transItem.vatAmount}</td>
-                                <td class="text-right">${transItem.grossAmount}</td>
+                                </td>
+
+                                <%--<td class="text-right">${transItem.netPricePer1000}</td>--%>
+                                <td class="text-right">
+                                    <form:input path="netPricePer1000" value="${transItem.netPricePer1000}" class="text-right form-control-sm" style="background-color: #e9ecef; max-width: 120px;" readonly="true"/>
+                                    <form:errors path="netPricePer1000" class="text-danger"/>
+                                </td>
+
+                                <%--<td class="text-right">${transItem.netAmount}</td>--%>
+                                <td class="text-right">
+                                    <form:input path="netAmount" value="${transItem.netAmount}" class="text-right form-control-sm" style="background-color: #e9ecef; max-width: 120px;" readonly="true"/>
+                                </td>
+
+                                <%--<td class="text-right">${transItem.vatAmount}</td>--%>
+                                <td class="text-right">
+                                    <form:input path="vatAmount" value="${transItem.vatAmount}" class="text-right form-control-sm" style="background-color: #e9ecef; max-width: 120px;" readonly="true"/>
+                                </td>
+
+                                <%--<td class="text-right">${transItem.grossAmount}</td>--%>
+                                <td class="text-right">
+                                    <form:input path="grossAmount" value="${transItem.grossAmount}" class="text-right form-control-sm" style="background-color: #e9ecef; max-width: 120px;" readonly="true"/>
+                                </td>
+
                                 <td class="text-center">
                                     <a href="/transaction/showTransaction/${transaction.id}" class="badge badge-success">OK</a>
                                 </td>
@@ -198,22 +220,26 @@
                         </div>
                     </div>
                 </div>
-
-               <%-- <form:hidden path="id"/>
-                <form:hidden path="transaction" id="transactionHiddenElement"/>
-                <form:hidden path="product" id="productHiddenElement"/>
-                <form:hidden path="quantity" id="quantityHiddenElement"/>
-                <form:hidden path="netPricePer1000" id="netPricePer1000HiddenElement"/>
-                <form:hidden path="netAmount" id="netAmountHiddenElement"/>
-                <form:hidden path="vatAmount" id="vatAmountHiddenElement"/>
-                <form:hidden path="grossAmount" id="grossAmountHiddenElement"/>--%>
-
             </form:form>
         </div>
     </div>
 </div>
 
 <script>
+    console.log("hello Konrad");
+    console.log("${formattedCreated}");
+    console.log("${transaction.id}");
+
+    <c:forEach items="${allProducts}" var="product" >
+    console.log("${product.id}");
+    console.log("${product.productName}");
+    console.log("${product.netPricePer1000}");
+    console.log("Koniec produktu");
+    console.log("----------");
+    </c:forEach>
+
+
+
 
 </script>
 </body>
