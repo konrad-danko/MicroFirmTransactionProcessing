@@ -18,7 +18,7 @@ public class TransItem {
     private Transaction transaction;
 
     @ManyToOne
-    @NotNull
+    @NotNull(message = "Pole nie może być puste")
     private Product product;
 
     @Column(nullable = false)

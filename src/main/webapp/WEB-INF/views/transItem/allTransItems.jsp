@@ -16,11 +16,14 @@
 <body>
 <div class="container-fluid">
 
+
+<%--
+
     <div class="d-flex justify-content-center">
         <div style="width:100%">
-           <%-- <form:form modelAttribute="transItem" method="post" class="border rounded shadow-lg">--%>
+           &lt;%&ndash; <form:form modelAttribute="transItem" method="post" class="border rounded shadow-lg">&ndash;%&gt;
                 <table class="table table-bordered table-hover table-sm">
-                    <%--<thead class="bg-primary text-white">--%>
+                    &lt;%&ndash;<thead class="bg-primary text-white">&ndash;%&gt;
                     <thead class="thead-light">
                     <tr>
                         <th class="align-middle">Id</th>
@@ -57,9 +60,13 @@
                     </tr>
                     </tfoot>
                 </table>
-         <%--   </form:form>--%>
+         &lt;%&ndash;   </form:form>&ndash;%&gt;
         </div>
     </div>
+--%>
+
+    
+
 </div>
 </body>
 </html>

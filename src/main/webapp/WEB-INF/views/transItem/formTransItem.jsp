@@ -5,7 +5,7 @@
 
 <html>
 <head>
-    <title>Transaction</title>
+    <title>TransItem</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -21,6 +21,7 @@
         <div style="width:100%">
             <h5>${headerMessage}${empty transaction.id ? "" : " nr "}${transaction.id}</h5>
             <form:form modelAttribute="transaction" method="post" class="border rounded shadow-lg">
+            <%--<form:form modelAttribute="transItem" method="post" class="border rounded shadow-lg">--%>
 
                 <%--Tabelka z inputami--%>
                 <div class="d-flex justify-content-start">
@@ -36,27 +37,34 @@
                             </thead>
                             <tbody>
                             <tr>
-                                <td>
-                                    <form:input type="date" path="transactionDate" class="text-center form-control" disabled="${disabledParam}" value="${transaction.transactionDate}"/>
+                                <td class="align-middle">
+                                    <div class="border rounded" style="height: 38px; background-color: #e9ecef; width: 188px;">
+                                        <fmt:parseDate value="${transaction.transactionDate}" pattern="yyyy-MM-dd" var="originalTransactionDate"/>
+                                        <fmt:formatDate value="${originalTransactionDate}" var="formattedTransactionDate" pattern="dd.MM.yyyy"/>
+                                        <div class="mx-2 mt-2 text-center">${formattedTransactionDate}</div>
+                                    </div>
                                 </td>
-                                <td>
-                                    <form:input type="date" path="sellDate" class="text-center form-control" disabled="${disabledParam}" value="${transaction.sellDate}"/>
+                                <td class="align-middle">
+                                    <div class="border rounded" style="height: 38px; background-color: #e9ecef; width: 188px;">
+                                        <fmt:parseDate value="${transaction.sellDate}" pattern="yyyy-MM-dd" var="originalSellDate"/>
+                                        <fmt:formatDate value="${originalSellDate}" var="formattedSellDate" pattern="dd.MM.yyyy"/>
+                                        <div class="mx-2 mt-2 text-center">${formattedSellDate}</div>
+                                    </div>
                                 </td>
                                 <td class="text-center align-middle">
                                     <div class="d-flex">
                                         <div class="mx-3" style="margin-top: 12px">
-                                            <form:checkbox path="issueInvoice" disabled="${disabledParam}" id="issueInvoiceCheckboxElement"/>
+                                            <input type="checkbox" disabled ${  transaction.issueInvoice  ?  "checked"  :  ""  }>
                                         </div>
                                         <div class="border rounded" style="height: 38px; background-color: #e9ecef; width: 100px;">
-                                            <div class="mx-2 mt-2 d-none" id="invoiceNoDivElement">${transaction.invoiceNo}</div>
+                                            <div class="mx-2 mt-2" id="invoiceNoDivElement">${transaction.invoiceNo}</div>
                                         </div>
                                     </div>
                                 </td>
                                 <td>
-                                    <form:select path="customer" class="form-control" disabled="${disabledParam}">
-                                        <form:option label="--Wybierz klienta--" value="0"/>
-                                        <form:options items="${allCustomers}" itemLabel="customerName" itemValue="id"/>
-                                    </form:select>
+                                    <div class="border rounded" style="height: 38px; background-color: #e9ecef;">
+                                        <div class="mx-4 mt-2">${transaction.customer.getCustomerName()}</div>
+                                    </div>
                                 </td>
                             </tr>
                             </tbody>
@@ -77,20 +85,45 @@
                                 <th class="text-right align-middle">Kwota netto</th>
                                 <th class="text-right align-middle">Kwota VAT</th>
                                 <th class="text-right align-middle">Kwota brutto</th>
+                                <th></th>
                             </tr>
                             </thead>
                             <tbody>
-                            <c:forEach items="${allTransItems}" var="transItem">
+                            <c:forEach items="${allTransItemsExisting}" var="transItemExisting">
                                 <tr>
-                                    <td>${transItem.id}</td>
-                                    <td>${transItem.product.getProductName()}</td>
-                                    <td class="text-right">${transItem.quantity}</td>
-                                    <td class="text-right">${transItem.netPricePer1000}</td>
-                                    <td class="text-right">${transItem.netAmount}</td>
-                                    <td class="text-right">${transItem.vatAmount}</td>
-                                    <td class="text-right">${transItem.grossAmount}</td>
+                                    <td>${transItemExisting.id}</td>
+                                    <td>${transItemExisting.product.getProductName()}</td>
+                                    <td class="text-right">${transItemExisting.quantity}</td>
+                                    <td class="text-right">${transItemExisting.netPricePer1000}</td>
+                                    <td class="text-right">${transItemExisting.netAmount}</td>
+                                    <td class="text-right">${transItemExisting.vatAmount}</td>
+                                    <td class="text-right">${transItemExisting.grossAmount}</td>
+                                    <td></td>
                                 </tr>
                             </c:forEach>
+                            <tr>
+                                <td></td>
+                                <td>${transItem.product.getProductName()}</td>
+                                <%--<td>
+                                    <form:select path="product" class="form-control" disabled="false">
+                                        <form:option label="--Wybierz produkt--" value="0"/>
+                                        <form:options items="${allProducts}" itemLabel="productName" itemValue="id"/>
+                                    </form:select>
+                                    <form:errors path="product" class="text-danger"/>
+                                </td>--%>
+                                <td class="text-right">${transItem.quantity}</td>
+                                <%--<td>
+                                    <form:input type="number" path="quantity" class="text-right form-control" disabled="false" value="${transItem.quantity}"/>
+                                    <form:errors path="quantity" class="text-danger"/>
+                                </td>--%>
+                                <td class="text-right">${transItem.netPricePer1000}</td>
+                                <td class="text-right">${transItem.netAmount}</td>
+                                <td class="text-right">${transItem.vatAmount}</td>
+                                <td class="text-right">${transItem.grossAmount}</td>
+                                <td class="text-center">
+                                    <a href="/transaction/showTransaction/${transaction.id}" class="badge badge-success">OK</a>
+                                </td>
+                            </tr>
                             </tbody>
                             <tfoot>
                             <tr class="font-weight-bold" style="background-color: #e9ecef">
@@ -121,12 +154,16 @@
                             <tbody>
                             <tr>
                                 <td>
-                                    <form:select path="paymentType" items="${allPaymentTypes}" class="form-control" disabled="${disabledParam}" itemLabel="description"  />
-                                    <form:errors path="paymentType" class="text-danger"/>
+                                    <div class="border rounded" style="height: 38px; background-color: #e9ecef; width: 199px;">
+                                        <div class="mx-2 mt-2">${transaction.paymentType.getDescription()}</div>
+                                    </div>
                                 </td>
-                                <td>
-                                    <form:input type="date" path="paymentDueDate" class="text-center form-control" disabled="${disabledParam}" value="${transaction.paymentDueDate}"/>
-                                    <form:errors path="paymentDueDate" class="text-danger"/>
+                                <td class="align-middle">
+                                    <div class="border rounded" style="height: 38px; background-color: #e9ecef; width: 188px;">
+                                        <fmt:parseDate value="${transaction.paymentDueDate}" pattern="yyyy-MM-dd" var="originalPaymentDueDate"/>
+                                        <fmt:formatDate value="${originalPaymentDueDate}" var="formattedPaymentDueDate" pattern="dd.MM.yyyy"/>
+                                        <div class="mx-2 mt-2 text-center">${formattedPaymentDueDate}</div>
+                                    </div>
                                 </td>
                                 <td class="align-middle">
                                     <div class="border rounded" style="height: 38px; background-color: #e9ecef;">
@@ -162,38 +199,21 @@
                     </div>
                 </div>
 
-                <form:hidden path="id"/>
-                <form:hidden path="firmData"/>
-                <form:hidden path="invoiceNo" id="invoiceNoHiddenElement"/>
-                <form:hidden path="totalNetAmount"/>
-                <form:hidden path="totalVatAmount"/>
-                <form:hidden path="totalGrossAmount"/>
-                <form:hidden path="paymentAmountInWords"/>
-                <form:hidden path="createdByUser"/>
-                <form:hidden path="updatedByUser"/>
+               <%-- <form:hidden path="id"/>
+                <form:hidden path="transaction" id="transactionHiddenElement"/>
+                <form:hidden path="product" id="productHiddenElement"/>
+                <form:hidden path="quantity" id="quantityHiddenElement"/>
+                <form:hidden path="netPricePer1000" id="netPricePer1000HiddenElement"/>
+                <form:hidden path="netAmount" id="netAmountHiddenElement"/>
+                <form:hidden path="vatAmount" id="vatAmountHiddenElement"/>
+                <form:hidden path="grossAmount" id="grossAmountHiddenElement"/>--%>
+
             </form:form>
         </div>
     </div>
 </div>
 
 <script>
-    const issueInvoiceCheckboxElement = document.getElementById("issueInvoiceCheckboxElement");
-    const invoiceNoDivElement = document.getElementById("invoiceNoDivElement");
-
-    if (issueInvoiceCheckboxElement.checked){
-        invoiceNoDivElement.classList.remove("d-none");
-    } else {
-        invoiceNoDivElement.classList.add("d-none");
-    }
-
-    issueInvoiceCheckboxElement.addEventListener("click", function (){
-        if (issueInvoiceCheckboxElement.checked){
-            invoiceNoDivElement.classList.remove("d-none");
-        } else {
-            invoiceNoDivElement.classList.add("d-none");
-        }
-    });
-
 
 </script>
 </body>
