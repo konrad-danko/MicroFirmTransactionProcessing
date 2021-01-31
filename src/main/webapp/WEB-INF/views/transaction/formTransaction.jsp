@@ -24,7 +24,7 @@
 
                 <%--Tabelka z inputami--%>
                 <div class="d-flex justify-content-start">
-                    <div class="m-3" style="width:auto">
+                    <div class="mx-3 mt-3" style="width:auto">
                         <table class="table table-bordered table-sm">
                             <thead class="thead-light">
                             <tr>
@@ -66,11 +66,11 @@
 
                 <%--Tabelka z transitems--%>
                 <div class="d-flex justify-content-center">
-                    <div class="m-3" style="width:100%">
+                    <div class="mx-3" style="width:100%">
                         <table class="table table-bordered table-hover table-sm">
                             <thead class="thead-light">
                             <tr>
-                                <th class="align-middle">Id</th>
+                                <th class="align-middle">L.p.</th>
                                 <th class="align-middle">Nazwa produktu</th>
                                 <th class="text-right align-middle">Ilość (szt.)</th>
                                 <th class="text-center align-middle">Cena netto (1000 szt.)</th>
@@ -80,9 +80,16 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <c:forEach items="${allTransItems}" var="transItem">
+                            <c:forEach items="${allTransItems}" var="transItem" varStatus="counter">
                                 <tr>
-                                    <td>${transItem.id}</td>
+                                    <script>
+                                        $(document).ready(function(){
+                                            $('[data-toggle="tooltip"]').tooltip({title: "<div class='bg-danger text-white font-weight-bold border border-danger rounded-sm'>&nbspUsuń tą pozycję z listy&nbsp</div>", html: true, placement: "top"});
+                                        });
+                                    </script>
+                                    <td class="text-center">
+                                        <a href="/transItem/deleteTransItem/${transItem.id}" data-toggle="tooltip">${counter.count}</a>
+                                    </td>
                                     <td>${transItem.product.getProductName()}</td>
                                     <td class="text-right">${transItem.quantity}</td>
                                     <td class="text-right">${transItem.netPricePer1000}</td>
@@ -95,7 +102,7 @@
                             <tfoot>
                             <tr class="font-weight-bold" style="background-color: #e9ecef">
                                 <td class="text-left" colspan="3">
-                                    <a href="/transItem/addTransItem/${transaction.id}" class="badge badge-success ml-3">Dodaj nowy</a>
+                                    <a href="/transItem/addTransItem/${transaction.id}" class="btn btn-success ml-3 ${addTransItemBtnVisibleParam}">Dodaj nową pozycję</a>
                                 </td>
                                 <td class="text-right">Razem:</td>
                                 <td class="text-right">${transaction.totalNetAmount}</td>
@@ -109,7 +116,7 @@
 
                 <%--Tabelka z detalami płatności--%>
                 <div class="d-flex justify-content-end">
-                    <div class="m-3" >
+                    <div class="mx-3" >
                         <table class="table table-bordered table-sm">
                             <thead class="thead-light">
                             <tr>
@@ -148,7 +155,7 @@
                         <input type="submit" value="Zatwierdź" class="btn btn-success mx-3 ${submitBtnVisibleParam}">
                     </div>
 
-                    <div class="mx-3">
+                    <div class="ml-auto mr-5">
                         <div>
                             <c:if test="${not empty formattedCreated}">
                                 Utworzono ${formattedCreated} przez ${transaction.createdByUser.getLoginName()}

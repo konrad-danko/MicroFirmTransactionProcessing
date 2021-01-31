@@ -80,6 +80,7 @@ public class TransactionController {
         model.addAttribute("allTransItems", transItemRepository.findAllByTransaction_Id(id));
         model.addAttribute("headerMessage", "Szczegóły transakcji");
         model.addAttribute("disabledParam", "true");
+        model.addAttribute("addTransItemBtnVisibleParam", "visible");
         model.addAttribute("submitBtnVisibleParam", "invisible");
         model.addAttribute("editBtnVisibleParam", "visible");
         model.addAttribute("delBtnVisibleParam", "visible");
@@ -100,10 +101,11 @@ public class TransactionController {
         transaction.setTotalNetAmount(new BigDecimal("0.00"));
         transaction.setTotalVatAmount(new BigDecimal("0.00"));
         transaction.setTotalGrossAmount(new BigDecimal("0.00"));
-        transaction.setPaymentAmountInWords("zero złotych, zero zero groszy");
+        transaction.setPaymentAmountInWords("-- zero zł. zero zero gr. --");
         model.addAttribute("transaction", transaction);
         model.addAttribute("headerMessage", "Dodaj nową transakcję");
         model.addAttribute("disabledParam", "false");
+        model.addAttribute("addTransItemBtnVisibleParam", "invisible");
         model.addAttribute("submitBtnVisibleParam", "visible");
         model.addAttribute("editBtnVisibleParam", "invisible");
         model.addAttribute("delBtnVisibleParam", "invisible");
@@ -117,6 +119,7 @@ public class TransactionController {
         if (result.hasErrors()) {
             model.addAttribute("headerMessage", "Dodaj nową transakcję");
             model.addAttribute("disabledParam", "false");
+            model.addAttribute("addTransItemBtnVisibleParam", "invisible");
             model.addAttribute("submitBtnVisibleParam", "visible");
             model.addAttribute("editBtnVisibleParam", "invisible");
             model.addAttribute("delBtnVisibleParam", "invisible");
@@ -142,6 +145,7 @@ public class TransactionController {
         model.addAttribute("allTransItems", transItemRepository.findAllByTransaction_Id(id));
         model.addAttribute("headerMessage", "Edytuj dane transakcji");
         model.addAttribute("disabledParam", "false");
+        model.addAttribute("addTransItemBtnVisibleParam", "invisible");
         model.addAttribute("submitBtnVisibleParam", "visible");
         model.addAttribute("editBtnVisibleParam", "invisible");
         model.addAttribute("delBtnVisibleParam", "invisible");
@@ -158,6 +162,7 @@ public class TransactionController {
             model.addAttribute("allTransItems", transItemRepository.findAllByTransaction_Id(id));
             model.addAttribute("headerMessage", "Edytuj dane transakcji");
             model.addAttribute("disabledParam", "false");
+            model.addAttribute("addTransItemBtnVisibleParam", "invisible");
             model.addAttribute("submitBtnVisibleParam", "visible");
             model.addAttribute("editBtnVisibleParam", "invisible");
             model.addAttribute("delBtnVisibleParam", "invisible");
@@ -183,6 +188,7 @@ public class TransactionController {
         model.addAttribute("allTransItems", transItemRepository.findAllByTransaction_Id(id));
         model.addAttribute("headerMessage", "Potwierdź usunięcie transakcji");
         model.addAttribute("disabledParam", "true");
+        model.addAttribute("addTransItemBtnVisibleParam", "invisible");
         model.addAttribute("submitBtnVisibleParam", "visible");
         model.addAttribute("editBtnVisibleParam", "invisible");
         model.addAttribute("delBtnVisibleParam", "invisible");
