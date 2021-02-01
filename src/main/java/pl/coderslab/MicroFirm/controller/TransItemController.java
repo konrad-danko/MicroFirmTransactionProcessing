@@ -78,7 +78,7 @@ public class TransItemController {
                     break;
                 case '9': word = "dziewięć";
                     break;
-                case '.': word = "zł.  ";
+                case '.': word = "zł.";
                     break;
                 default: word = "brak";
                     break;

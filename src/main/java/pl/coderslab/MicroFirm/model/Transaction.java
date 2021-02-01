@@ -46,8 +46,7 @@ public class Transaction {
     @Column(nullable = false)
     @NotNull(message = "Wybierz sposób zapłaty")
     private PaymentType paymentType;
-
-    @FutureOrPresent (message = "Data nie może być z przeszłości")
+    
     private LocalDate paymentDueDate;
 
     private LocalDate transactionDate;

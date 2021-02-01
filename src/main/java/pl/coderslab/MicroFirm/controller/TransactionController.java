@@ -19,10 +19,13 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping(path = "/transaction")
 public class TransactionController {
+
+    private final static String DUMMY_INVOICE_NO = "???/??/??";
 
     private final TransactionRepository transactionRepository;
     private final TransItemRepository transItemRepository;
@@ -53,6 +56,20 @@ public class TransactionController {
         if(transactionFromDB.getUpdated()!=null){
             model.addAttribute("formattedUpdated", formatter.format(transactionFromDB.getUpdated()));
         }
+    }
+
+    private String generateInvoiceNo(Transaction transaction){
+        LocalDate transactionDate = transaction.getTransactionDate();
+        int year = transactionDate.getYear();
+        LocalDate startDate = LocalDate.of(year, 1, 1);
+        LocalDate endDate = LocalDate.of(year, 12, 31);
+        Optional<Transaction> transactionWithLatestInvoiceNo = transactionRepository.getTransactionWithMostRecentInvoiceNo(startDate, endDate);
+        String latestInvoiceNo = transactionWithLatestInvoiceNo.isPresent() ? transactionWithLatestInvoiceNo.get().getInvoiceNo() : "0000";
+        int intNumerator = Integer.parseInt(latestInvoiceNo.substring(0,3)) + 1;
+        String strNumerator = ("00" + intNumerator).substring(("00" + intNumerator).length()-3);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("/MM/yy");
+        String monthAndYear = formatter.format(transactionDate);
+        return strNumerator + monthAndYear;
     }
 
     @ModelAttribute("allCustomers")
@@ -96,7 +113,7 @@ public class TransactionController {
         transaction.setSellDate(LocalDate.now());
         transaction.setPaymentDueDate(LocalDate.now());
         transaction.setIssueInvoice(false);
-        transaction.setInvoiceNo("145/01/21");    // !!!!!!!!dorobić metodę na numerację faktur !!!!!!!!!
+        transaction.setInvoiceNo(DUMMY_INVOICE_NO);
         transaction.setPaymentType(Transaction.PaymentType.GZ);
         transaction.setTotalNetAmount(new BigDecimal("0.00"));
         transaction.setTotalVatAmount(new BigDecimal("0.00"));
@@ -126,7 +143,9 @@ public class TransactionController {
             return "/transaction/formTransaction";
         }
         transaction.setCreatedByUser(getLoggedUser(request));
-        if(!transaction.isIssueInvoice()){
+        if(transaction.isIssueInvoice()){
+            transaction.setInvoiceNo(generateInvoiceNo(transaction));
+        } else {
             transaction.setInvoiceNo(null);
         }
         transactionRepository.save(transaction);
@@ -138,7 +157,7 @@ public class TransactionController {
     public String initiateEditTransaction(Model model, @PathVariable long id) {
         Transaction transaction = transactionRepository.findById(id).orElse(null);
         if(transaction.getInvoiceNo()==null){
-            transaction.setInvoiceNo("145/01/21");    // !!!!!!!!dorobić metodę na numerację faktur !!!!!!!!!
+            transaction.setInvoiceNo(DUMMY_INVOICE_NO);
         }
         setFormattedCreatedAndUpdatedAsModelAttributes(transaction, model);
         model.addAttribute("transaction", transaction);
@@ -171,6 +190,8 @@ public class TransactionController {
         transaction.setUpdatedByUser(getLoggedUser(request));
         if(!transaction.isIssueInvoice()){
             transaction.setInvoiceNo(null);
+        } else if (transaction.isIssueInvoice() && transaction.getInvoiceNo().equals(DUMMY_INVOICE_NO)) {
+            transaction.setInvoiceNo(generateInvoiceNo(transaction));
         }
         //poniższa linijka jest dlatego, że przeglądarka obcina sekundy z daty "created"
         //i dlatego muszę pobierać tą datę z bazy i dopisać do transakcji przed ponownym zapisem do bazy
