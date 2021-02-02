@@ -53,6 +53,8 @@
                 </div>
                 <br>
                 <br>
+
+                <%--Blok z przyciskami i "audit trial-em"--%>
                 <div class="d-flex mb-4">
                     <div class="form-group">
                         <a href="/customer/showAllCustomers" class="btn btn-primary mx-3">Wróć do listy klientów</a>
@@ -61,7 +63,7 @@
                         <input type="submit" value="Zatwierdź" class="btn btn-success mx-3 ${submitBtnVisibleParam}">
                     </div>
 
-                    <div class="mx-3">
+                    <div class="ml-auto mr-5">
                         <div>
                             <c:if test="${not empty customer.created}">
                                 <fmt:parseDate value="${customer.created}" pattern="yyyy-MM-dd'T'HH:mm:ss" var="originalCreated"/>

@@ -6,6 +6,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import pl.coderslab.MicroFirm.model.User;
+import pl.coderslab.MicroFirm.repository.CustomerRepository;
+import pl.coderslab.MicroFirm.repository.ProductRepository;
+import pl.coderslab.MicroFirm.repository.TransactionRepository;
 import pl.coderslab.MicroFirm.repository.UserRepository;
 
 import javax.validation.Valid;
@@ -15,8 +18,17 @@ import javax.validation.Valid;
 public class UserController {
 
     private final UserRepository userRepository;
-    public UserController(UserRepository userRepository) {
+    private final CustomerRepository customerRepository;
+    private final ProductRepository productRepository;
+    private final TransactionRepository transactionRepository;
+    public UserController(UserRepository userRepository,
+                          CustomerRepository customerRepository,
+                          ProductRepository productRepository,
+                          TransactionRepository transactionRepository) {
         this.userRepository = userRepository;
+        this.customerRepository = customerRepository;
+        this.productRepository = productRepository;
+        this.transactionRepository = transactionRepository;
     }
 
     //metoda hashująca hasło:
@@ -108,9 +120,16 @@ public class UserController {
         return "/user/formUser";
     }
     @PostMapping(path = "/deleteUser/{id}")
-    public String processDeleteUser(@ModelAttribute User user) {
-        //tu dopisać kod na sprawdzanie czy użytkownik nie ma jakiegoś podpiętego rekordu
-        //userRepository.delete(user);
+    public String processDeleteUser(@ModelAttribute User user, @PathVariable long id) {
+        int numberOfCustomers = customerRepository.findAllWithGivenUser(user).size();
+        int numberOfProducts = productRepository.findAllWithGivenUser(user).size();
+        int numberOfTransactions = transactionRepository.findAllWithGivenUser(user).size();
+        int numberOfRecords = numberOfCustomers + numberOfProducts + numberOfTransactions;
+        //nie wolno usuwać admin-a (id = 1)
+        if(id==1 || numberOfRecords>0){
+            return "redirect:/user/showUser/"+id;
+        }
+        userRepository.delete(user);
         return "redirect:/user/showAllUsers";
     }
 }

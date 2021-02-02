@@ -117,7 +117,7 @@ public class CustomerController {
     @PostMapping(path = "/deleteCustomer/{id}")
     public String processDeleteCustomer(@ModelAttribute Customer customer, @PathVariable long id) {
         if(transactionRepository.findAllByCustomer_Id(id).size()>0){
-            return "redirect:/customer/showCustomer/"+customer.getId();
+            return "redirect:/customer/showCustomer/"+id;
         }
         customerRepository.delete(customer);
         return "redirect:/customer/showAllCustomers";

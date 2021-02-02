@@ -116,7 +116,7 @@ public class ProductController {
     @PostMapping(path = "/deleteProduct/{id}")
     public String processDeleteProduct(@ModelAttribute Product product, @PathVariable long id) {
         if(transItemRepository.findAllByProduct_Id(id).size()>0){
-            return "redirect:/product/showProduct/"+product.getId();
+            return "redirect:/product/showProduct/"+id;
         }
         productRepository.delete(product);
         return "redirect:/product/showAllProducts";

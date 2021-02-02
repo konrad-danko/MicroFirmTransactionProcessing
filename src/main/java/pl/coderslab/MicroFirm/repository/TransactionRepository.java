@@ -3,6 +3,7 @@ package pl.coderslab.MicroFirm.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import pl.coderslab.MicroFirm.model.Transaction;
+import pl.coderslab.MicroFirm.model.User;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -20,4 +21,12 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
     Optional<Transaction> getTransactionWithMostRecentInvoiceNo(LocalDate startDate, LocalDate endDate);
 
     List<Transaction> findAllByCustomer_Id(long id);
+
+    String sqlQueryAllWithGivenUser = "select * from transactions where\n" +
+            "created_by_user_id = ?1 or\n" +
+            "updated_by_user_id = ?1";
+    @Query(value = sqlQueryAllWithGivenUser, nativeQuery = true)
+    List<Transaction> findAllWithGivenUser(User user);
+
+
 }

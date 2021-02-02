@@ -84,11 +84,11 @@
                                 <tr>
                                     <script>
                                         $(document).ready(function(){
-                                            $('[data-toggle="tooltip"]').tooltip({title: "<div class='bg-danger text-white font-weight-bold border border-danger rounded-sm'>&nbspUsuń tą pozycję z listy&nbsp</div>", html: true, placement: "top"});
+                                            $('[data-toggle="tooltipTransItem"]').tooltip({title: "<div class='bg-danger text-white font-weight-bold border border-danger rounded-sm'>&nbspUsuń tą pozycję z listy&nbsp</div>", html: true, placement: "top"});
                                         });
                                     </script>
                                     <td class="text-center">
-                                        <a href="/transItem/deleteTransItem/${transItem.id}" data-toggle="tooltip">${counter.count}</a>
+                                        <a href="/transItem/deleteTransItem/${transItem.id}" data-toggle="tooltipTransItem">${counter.count}</a>
                                     </td>
                                     <td>${transItem.product.getProductName()}</td>
                                     <td class="text-right">${transItem.quantity}</td>

@@ -218,7 +218,7 @@ public class TransactionController {
     @PostMapping(path = "/deleteTransaction/{id}")
     public String processDeleteTransaction(@ModelAttribute Transaction transaction, @PathVariable long id) {
         if(transItemRepository.findAllByTransaction_Id(id).size()>0){
-            return "redirect:/transaction/showTransaction/"+transaction.getId();
+            return "redirect:/transaction/showTransaction/"+id;
         }
         transactionRepository.delete(transaction);
         return "redirect:/transaction/showAllTransactions";

@@ -44,7 +44,7 @@
 
     <c:if test="${not empty loginName}">
         <div class="btn-group-vertical btn-group-sm ml-auto">
-            <a href="/login/editPassword" class="btn btn-secondary font-weight-bold">${loginName}</a>
+            <a href="/login/editPassword" data-toggle="tooltipHeader" class="btn btn-secondary font-weight-bold">${loginName}</a>
             <a href="/login/logout" class="btn btn-danger">Wyloguj się</a>
         </div>
     </c:if>
@@ -55,5 +55,10 @@
 </nav>
 <br>
 
+<script>
+    $(document).ready(function(){
+        $('[data-toggle="tooltipHeader"]').tooltip({title: "<div class='bg-warning text-dark font-weight-bold border border-warning rounded-sm'>&nbspZmień hasło&nbsp</div>", html: true, placement: "left"});
+    });
+</script>
 </body>
 </html>
