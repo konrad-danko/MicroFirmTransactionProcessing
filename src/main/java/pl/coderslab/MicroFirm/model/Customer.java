@@ -1,6 +1,7 @@
 package pl.coderslab.MicroFirm.model;
 
 import org.hibernate.validator.constraints.pl.NIP;
+import pl.coderslab.MicroFirm.validator.PostCode;
 import pl.coderslab.MicroFirm.validator.UniqueNIP;
 
 import javax.persistence.*;
@@ -22,7 +23,7 @@ public class Customer {
     private String customerName;
 
     @Column(nullable = false)
-    @Size(min=6, max = 6, message = "Wpisz kod pocztowy w formacie XX-XXX")
+    @PostCode(message = "Wpisz kod pocztowy w formacie XX-XXX")
     private String customerPostCode;
 
     @Column(nullable = false)
