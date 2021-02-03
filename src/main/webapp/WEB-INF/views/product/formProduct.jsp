@@ -59,16 +59,12 @@
 
                     <div class="ml-auto mr-5">
                         <div>
-                            <c:if test="${not empty product.created}">
-                                <fmt:parseDate value="${product.created}" pattern="yyyy-MM-dd'T'HH:mm:ss" var="originalCreated"/>
-                                <fmt:formatDate value="${originalCreated}" var="formattedCreated" pattern="dd.MM.yyyy 'o' HH:mm:ss"/>
+                            <c:if test="${not empty formattedCreated}">
                                 Utworzono ${formattedCreated} przez ${product.createdByUser.getLoginName()}
                             </c:if>
                         </div>
                         <div>
-                            <c:if test="${not empty product.updated}">
-                                <fmt:parseDate value="${product.updated}" pattern="yyyy-MM-dd'T'HH:mm:ss" var="originalUpdated"/>
-                                <fmt:formatDate value="${originalUpdated}" var="formattedUpdated" pattern="dd.MM.yyyy 'o' HH:mm:ss"/>
+                            <c:if test="${not empty formattedUpdated}">
                                 Edytowano ${formattedUpdated} przez ${product.updatedByUser.getLoginName()}
                             </c:if>
                         </div>

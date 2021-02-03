@@ -1,6 +1,7 @@
 package pl.coderslab.MicroFirm.model;
 
 import org.hibernate.validator.constraints.pl.NIP;
+import pl.coderslab.MicroFirm.validator.UniqueNIP;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -36,6 +37,7 @@ public class Customer {
 
     @Column(unique = true, nullable = false)
     @NIP(message = "Wpisz prawidłowy nr NIP")
+    @UniqueNIP(message = "Ten nr NIP jest już przypisany do innego klienta")
     private String customerNIP;
 
     @ManyToOne

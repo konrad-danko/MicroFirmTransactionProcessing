@@ -12,6 +12,8 @@ import pl.coderslab.MicroFirm.repository.TransactionRepository;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Controller
 @RequestMapping(path = "/customer")
@@ -29,6 +31,18 @@ public class CustomerController {
         return (User)session.getAttribute("loggedUser");
     }
 
+    private void setFormattedCreatedAndUpdatedAsModelAttributes(Customer customer, Model model){
+        long id = customer.getId();
+        Customer customerFromDB = customerRepository.findById(id).orElse(null);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm:ss");
+        if(customerFromDB.getCreated()!=null){
+            model.addAttribute("formattedCreated", formatter.format(customerFromDB.getCreated()));
+        }
+        if(customerFromDB.getUpdated()!=null){
+            model.addAttribute("formattedUpdated", formatter.format(customerFromDB.getUpdated()));
+        }
+    }
+
     @GetMapping(path = "/showAllCustomers")
     public String showAllCustomers(Model model) {
         model.addAttribute("allCustomers", customerRepository.findAll());
@@ -38,9 +52,10 @@ public class CustomerController {
     //show a customer
     @GetMapping(path = "/showCustomer/{id}")
     public String showCustomer(Model model, @PathVariable long id) {
-        model.addAttribute("customer", customerRepository.findById(id).orElse(null));
+        Customer customer = customerRepository.findById(id).orElse(null);
+        setFormattedCreatedAndUpdatedAsModelAttributes(customer, model);
+        model.addAttribute("customer", customer);
         model.addAttribute("headerMessage", "Dane klienta");
-
         model.addAttribute("disabledParam", "true");
         model.addAttribute("submitBtnVisibleParam", "invisible");
         model.addAttribute("editBtnVisibleParam", "visible");
@@ -50,17 +65,26 @@ public class CustomerController {
 
     //add a customer
     @GetMapping(path = "/addCustomer")
-    public String initiateAddCustomer(Model model) {
+    public String initiateAddCustomer(Model model,
+                                      HttpServletRequest request) {
         model.addAttribute("customer", new Customer());
         model.addAttribute("headerMessage", "Dodaj nowego klienta");
         model.addAttribute("disabledParam", "false");
         model.addAttribute("submitBtnVisibleParam", "visible");
         model.addAttribute("editBtnVisibleParam", "invisible");
         model.addAttribute("delBtnVisibleParam", "invisible");
+
+        HttpSession session = request.getSession();
+        List<Customer> customerList = customerRepository.findAll();
+        session.setAttribute("customerList", customerList);
+
         return "/customer/formCustomer";
     }
     @PostMapping(path = "/addCustomer")
-    public String processAddCustomer(@ModelAttribute @Valid Customer customer, BindingResult result, Model model, HttpServletRequest request) {
+    public String processAddCustomer(@ModelAttribute @Valid Customer customer,
+                                     BindingResult result,
+                                     Model model,
+                                     HttpServletRequest request) {
         if (result.hasErrors()) {
             model.addAttribute("headerMessage", "Dodaj nowego klienta");
             model.addAttribute("disabledParam", "false");
@@ -76,18 +100,33 @@ public class CustomerController {
 
     //edit a customer
     @GetMapping(path = "/editCustomer/{id}")
-    public String initiateEditCustomer(Model model, @PathVariable long id) {
-        model.addAttribute("customer", customerRepository.findById(id).orElse(null));
+    public String initiateEditCustomer(Model model,
+                                       @PathVariable long id,
+                                       HttpServletRequest request) {
+        Customer customer = customerRepository.findById(id).orElse(null);
+        setFormattedCreatedAndUpdatedAsModelAttributes(customer, model);
+        model.addAttribute("customer", customer);
         model.addAttribute("headerMessage", "Edytuj dane klienta");
         model.addAttribute("disabledParam", "false");
         model.addAttribute("submitBtnVisibleParam", "visible");
         model.addAttribute("editBtnVisibleParam", "invisible");
         model.addAttribute("delBtnVisibleParam", "invisible");
+
+        HttpSession session = request.getSession();
+        List<Customer> customerList = customerRepository.findAll();
+        session.setAttribute("customerList", customerList);
+        String editedCustomerNIP = customer.getCustomerNIP();
+        session.setAttribute("editedCustomerNIP", editedCustomerNIP);
+
         return "/customer/formCustomer";
     }
     @PostMapping(path = "/editCustomer/{id}")
-    public String processEditCustomer(@ModelAttribute @Valid Customer customer, BindingResult result, Model model, HttpServletRequest request) {
+    public String processEditCustomer(@ModelAttribute @Valid Customer customer,
+                                      BindingResult result,
+                                      Model model,
+                                      HttpServletRequest request) {
         if (result.hasErrors()) {
+            setFormattedCreatedAndUpdatedAsModelAttributes(customer, model);
             model.addAttribute("headerMessage", "Edytuj dane klienta");
             model.addAttribute("disabledParam", "false");
             model.addAttribute("submitBtnVisibleParam", "visible");
@@ -106,7 +145,9 @@ public class CustomerController {
     //delete a customer
     @GetMapping(path = "/deleteCustomer/{id}")
     public String initiateDeleteCustomer(Model model, @PathVariable long id) {
-        model.addAttribute("customer", customerRepository.findById(id).orElse(null));
+        Customer customer = customerRepository.findById(id).orElse(null);
+        setFormattedCreatedAndUpdatedAsModelAttributes(customer, model);
+        model.addAttribute("customer", customer);
         model.addAttribute("headerMessage", "Potwierdź usunięcie danych klienta");
         model.addAttribute("disabledParam", "true");
         model.addAttribute("submitBtnVisibleParam", "visible");

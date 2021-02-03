@@ -12,6 +12,7 @@ import pl.coderslab.MicroFirm.repository.TransItemRepository;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.time.format.DateTimeFormatter;
 
 @Controller
 @RequestMapping(path = "/product")
@@ -29,6 +30,18 @@ public class ProductController {
         return (User)session.getAttribute("loggedUser");
     }
 
+    private void setFormattedCreatedAndUpdatedAsModelAttributes(Product product, Model model){
+        long id = product.getId();
+        Product productFromDB = productRepository.findById(id).orElse(null);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm:ss");
+        if(productFromDB.getCreated()!=null){
+            model.addAttribute("formattedCreated", formatter.format(productFromDB.getCreated()));
+        }
+        if(productFromDB.getUpdated()!=null){
+            model.addAttribute("formattedUpdated", formatter.format(productFromDB.getUpdated()));
+        }
+    }
+
     @GetMapping(path = "/showAllProducts")
     public String showAllProducts(Model model) {
         model.addAttribute("allProducts", productRepository.findAll());
@@ -38,7 +51,9 @@ public class ProductController {
     //show a product
     @GetMapping(path = "/showProduct/{id}")
     public String showProduct(Model model, @PathVariable long id) {
-        model.addAttribute("product", productRepository.findById(id).orElse(null));
+        Product product = productRepository.findById(id).orElse(null);
+        setFormattedCreatedAndUpdatedAsModelAttributes(product, model);
+        model.addAttribute("product", product);
         model.addAttribute("headerMessage", "Dane produktu");
         model.addAttribute("disabledParam", "true");
         model.addAttribute("submitBtnVisibleParam", "invisible");
@@ -76,7 +91,9 @@ public class ProductController {
     //edit a product
     @GetMapping(path = "/editProduct/{id}")
     public String initiateEditProduct(Model model, @PathVariable long id) {
-        model.addAttribute("product", productRepository.findById(id).orElse(null));
+        Product product = productRepository.findById(id).orElse(null);
+        setFormattedCreatedAndUpdatedAsModelAttributes(product, model);
+        model.addAttribute("product", product);
         model.addAttribute("headerMessage", "Edytuj dane produktu");
         model.addAttribute("disabledParam", "false");
         model.addAttribute("submitBtnVisibleParam", "visible");
@@ -87,6 +104,7 @@ public class ProductController {
     @PostMapping(path = "/editProduct/{id}")
     public String processEditProduct(@ModelAttribute @Valid Product product, BindingResult result, Model model, HttpServletRequest request) {
         if (result.hasErrors()) {
+            setFormattedCreatedAndUpdatedAsModelAttributes(product, model);
             model.addAttribute("headerMessage", "Edytuj dane produktu");
             model.addAttribute("disabledParam", "false");
             model.addAttribute("submitBtnVisibleParam", "visible");
@@ -105,7 +123,9 @@ public class ProductController {
     //delete a product
     @GetMapping(path = "/deleteProduct/{id}")
     public String initiateDeleteProduct(Model model, @PathVariable long id) {
-        model.addAttribute("product", productRepository.findById(id).orElse(null));
+        Product product = productRepository.findById(id).orElse(null);
+        setFormattedCreatedAndUpdatedAsModelAttributes(product, model);
+        model.addAttribute("product", product);
         model.addAttribute("headerMessage", "Potwierdź usunięcie produktu");
         model.addAttribute("disabledParam", "true");
         model.addAttribute("submitBtnVisibleParam", "visible");

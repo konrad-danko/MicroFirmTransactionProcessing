@@ -9,7 +9,6 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import pl.coderslab.MicroFirm.converter.LocalDateConverter;
 import pl.coderslab.MicroFirm.filters.AdminFilter;
 
 import java.util.HashSet;
