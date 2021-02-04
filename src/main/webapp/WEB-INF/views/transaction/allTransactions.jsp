@@ -27,7 +27,7 @@
             <table class="table table-bordered table-hover table-sm shadow-lg">
                 <thead class="bg-primary text-white">
                 <tr>
-                    <th>Id</th>
+                    <th class="text-right">Id</th>
                     <th>Klient</th>
                     <th class="text-center">Faktura</th>
                     <th class="text-center">Data transakcji</th>
@@ -40,7 +40,7 @@
                 <tbody>
                 <c:forEach items="${allTransactions}" var="transaction">
                     <tr>
-                        <td><a href="/transaction/showTransaction/${transaction.id}">${transaction.id}</a></td>
+                        <td class="text-right"><a href="/transaction/showTransaction/${transaction.id}">${transaction.id}</a></td>
                         <td>${transaction.customer.getCustomerName()}</td>
                         <td class="text-center">${transaction.invoiceNo}</td>
                         <td class="text-center">

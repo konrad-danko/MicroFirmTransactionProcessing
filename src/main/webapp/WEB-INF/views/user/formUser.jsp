@@ -27,7 +27,7 @@
                     </div>
                     <div class="form-group mx-2">
                         <label for="loginName">LoginName:</label>
-                        <form:input path="loginName" id="loginName" class="form-control" disabled="${disabledParam}"/>
+                        <form:input path="loginName" id="loginName" class="form-control" disabled="${disabledParam}" autofocus="true"/>
                         <form:errors path="loginName" class="text-danger"/>
                     </div>
                     <div class="form-group mx-2">

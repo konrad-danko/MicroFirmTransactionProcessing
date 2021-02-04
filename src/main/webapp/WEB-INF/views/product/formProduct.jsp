@@ -24,7 +24,7 @@
                 <div class="d-flex mt-3">
                     <div class="form-group mx-2 flex-grow-1">
                         <label for="productName">Nazwa:</label>
-                        <form:input path="productName" id="productName" class="form-control" disabled="${disabledParam}"/>
+                        <form:input path="productName" id="productName" class="form-control" disabled="${disabledParam}" autofocus="true"/>
                         <form:errors path="productName" class="text-danger"/>
                     </div>
                 </div>
@@ -32,12 +32,12 @@
                 <div class="d-flex">
                     <div class="form-group mx-2">
                         <label for="netPricePer1000">Cena netto za 1000 szt. (PLN):</label>
-                        <form:input path="netPricePer1000" id="netPricePer1000" class="form-control text-right" disabled="${disabledParam}"/>
+                        <form:input path="netPricePer1000" id="netPricePer1000" pattern="^\d{0,5}(\.\d{0,2})?$" title="Wpisz liczbę poniżej 100 000 np: '123.45' - jako separator dziesiętny użyj kropki" class="form-control text-right" disabled="${disabledParam}"/>
                         <form:errors path="netPricePer1000" class="text-danger"/>
                     </div>
                     <div class="form-group mx-2">
                         <label for="vatRate">Stawka VAT (%):</label>
-                        <form:input path="vatRate" id="vatRate" class="form-control text-right" disabled="${disabledParam}"/>
+                        <form:input path="vatRate" id="vatRate" pattern="^\d{0,2}(\.\d{0,2})?$" title="Wpisz liczbę poniżej 100, np: '12.34' - jako separator dziesiętny użyj kropki" class="form-control text-right" disabled="${disabledParam}"/>
                         <form:errors path="vatRate" class="text-danger"/>
                     </div>
                     <div class="form-group mx-2">

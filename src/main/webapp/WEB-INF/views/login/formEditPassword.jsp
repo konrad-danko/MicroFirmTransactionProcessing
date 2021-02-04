@@ -28,7 +28,7 @@
                 </div>
                 <div class="form-group">
                     <label for="oldPassword">Dotychczasowe hasło:</label>
-                    <input type="password" name="oldPassword" id="oldPassword" class="form-control"  placeholder="Wpisz dotychczasowe hasło">
+                    <input type="password" name="oldPassword" id="oldPassword" class="form-control"  placeholder="Wpisz dotychczasowe hasło" autofocus="true">
                 </div>
                 <div class="form-group">
                     <label for="newPassword">Nowe hasło:</label>

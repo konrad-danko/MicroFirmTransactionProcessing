@@ -37,7 +37,7 @@
                             <tbody>
                             <tr>
                                 <td>
-                                    <form:input type="date" path="transactionDate" class="text-center form-control" disabled="${disabledParam}" value="${transaction.transactionDate}"/>
+                                    <form:input type="date" path="transactionDate" class="text-center form-control" disabled="${disabledParam}" value="${transaction.transactionDate}" autofocus="true"/>
                                 </td>
                                 <td>
                                     <form:input type="date" path="sellDate" class="text-center form-control" disabled="${disabledParam}" value="${transaction.sellDate}"/>
@@ -70,7 +70,7 @@
                         <table class="table table-bordered table-hover table-sm">
                             <thead class="thead-light">
                             <tr>
-                                <th class="align-middle">L.p.</th>
+                                <th class="text-right">L.p.</th>
                                 <th class="align-middle">Nazwa produktu</th>
                                 <th class="text-right align-middle">Ilość (szt.)</th>
                                 <th class="text-center align-middle">Cena netto (1000 szt.)</th>
@@ -87,7 +87,7 @@
                                             $('[data-toggle="tooltipTransItem"]').tooltip({title: "<div class='bg-danger text-white font-weight-bold border border-danger rounded-sm'>&nbspUsuń tą pozycję z listy&nbsp</div>", html: true, placement: "top"});
                                         });
                                     </script>
-                                    <td class="text-center">
+                                    <td class="text-right">
                                         <a href="/transItem/deleteTransItem/${transItem.id}" data-toggle="tooltipTransItem">${counter.count}</a>
                                     </td>
                                     <td>${transItem.product.getProductName()}</td>

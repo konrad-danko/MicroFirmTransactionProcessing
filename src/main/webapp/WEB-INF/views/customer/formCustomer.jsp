@@ -24,7 +24,7 @@
                 <div class="d-flex mt-3">
                     <div class="form-group mx-2">
                         <label for="customerNIP">NIP:</label>
-                        <form:input path="customerNIP" id="customerNIP" class="form-control" disabled="${disabledParam}"/>
+                        <form:input path="customerNIP" id="customerNIP" class="form-control" disabled="${disabledParam}" autofocus="true"/>
                         <form:errors path="customerNIP" class="text-danger"/>
                     </div>
                     <div class="form-group mx-2 flex-grow-1">

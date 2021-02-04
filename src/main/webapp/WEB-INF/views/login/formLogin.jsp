@@ -24,7 +24,7 @@
                 <br>
                 <div class="form-group">
                     <label for="loginName">Nazwa użytkownika:</label>
-                    <input type="text" name="loginName" id="loginName" class="form-control"  placeholder="Wpisz nazwę użytkownika">
+                    <input type="text" name="loginName" id="loginName" class="form-control"  placeholder="Wpisz nazwę użytkownika" autofocus="true">
                 </div>
                 <div class="form-group">
                     <label for="password">Hasło:</label>

@@ -20,12 +20,14 @@ public class Product {
 
     @Column(nullable = false, scale=2)
     @NotNull(message = "Pole nie może być puste")
-    @Digits(integer=5, fraction=2, message = "Wpisz liczbę poniżej 100 000 z dokładnością do dwóch miejsc dziesiętnych")
+    @Digits(integer=5, fraction=2, message = "Wpisz liczbę poniżej 100 000 np: '123.45' - jako separator dziesiętny użyj kropki")
+    @Positive(message = "Liczba musi być większa od zera")
     private BigDecimal netPricePer1000;
 
     @Column(nullable = false, scale=2)
     @NotNull(message = "Pole nie może być puste")
-    @Digits(integer=2, fraction=2, message = "Wpisz liczbę poniżej 100 z dokładnością do dwóch miejsc dziesiętnych")
+    @Digits(integer=2, fraction=2, message = "Wpisz liczbę poniżej 100, np: '12.34' - jako separator dziesiętny użyj kropki")
+    @PositiveOrZero(message = "Liczba nie może być ujemna")
     private BigDecimal vatRate;
 
     @ManyToOne

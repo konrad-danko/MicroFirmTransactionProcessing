@@ -3,6 +3,7 @@ package pl.coderslab.MicroFirm.model;
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
 
 @Entity
@@ -18,17 +19,19 @@ public class TransItem {
     private Transaction transaction;
 
     @ManyToOne
-    @NotNull(message = "Pole nie może być puste")
+    @NotNull(message = "Wybierz produkt z listy")
     private Product product;
 
     @Column(nullable = false)
     @NotNull(message = "Pole nie może być puste")
     @Digits(integer=5, fraction=0, message = "Wpisz liczbę całkowitą poniżej 100 000")
+    @Positive(message = "Liczba musi być większa od zera")
     private int quantity;
 
     @Column(nullable = false, scale=2)
     @NotNull(message = "Pole nie może być puste")
-    @Digits(integer=5, fraction=2, message = "Wpisz liczbę poniżej 100 000 z dokładnością do dwóch miejsc dziesiętnych")
+    @Digits(integer=5, fraction=2, message = "Wpisz liczbę poniżej 100 000 np: '123.45' - jako separator dziesiętny użyj kropki")
+    @Positive(message = "Liczba musi być większa od zera")
     private BigDecimal netPricePer1000; //autoupdated during add operation
 
     @Column(nullable = false)

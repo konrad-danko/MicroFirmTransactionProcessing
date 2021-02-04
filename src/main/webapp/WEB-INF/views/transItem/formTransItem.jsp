@@ -77,7 +77,7 @@
                         <table class="table table-bordered table-hover table-sm">
                             <thead class="thead-light">
                             <tr>
-                                <th class="align-middle">L.p.</th>
+                                <th class="text-right">L.p.</th>
                                 <th class="align-middle">Nazwa produktu</th>
                                 <th class="text-right align-middle">Ilość (szt.)</th>
                                 <th class="text-center align-middle">Cena netto (1000 szt.)</th>
@@ -89,7 +89,7 @@
                             <tbody>
                             <c:forEach items="${allTransItemsExisting}" var="transItemExisting" varStatus="counter">
                                 <tr>
-                                    <td class="text-center">${counter.count}</td>
+                                    <td class="text-right">${counter.count}</td>
                                     <td>${transItemExisting.product.getProductName()}</td>
                                     <td class="text-right">${transItemExisting.quantity}</td>
                                     <td class="text-right">${transItemExisting.netPricePer1000}</td>
@@ -104,7 +104,7 @@
 
                                 <td></td>
                                 <td>
-                                    <form:select path="product" id="productSelectElement" style="background-color: white" class="form-control-sm" disabled="false">
+                                    <form:select path="product" id="productSelectElement" style="background-color: white" class="form-control-sm" disabled="false" autofocus="true">
                                         <form:option label="--Wybierz produkt--" value="0"/>
                                         <form:options items="${allProducts}" itemLabel="productName" itemValue="id"/>
                                     </form:select>
@@ -112,7 +112,7 @@
                                     <form:errors path="product" class="text-danger"/>
                                 </td>
                                 <td class="text-right">
-                                    <form:input path="quantity" id="quantityInputElement" type="number" min="1" class="text-right form-control-sm" style="max-width: 120px" readonly="false" value="${transItem.quantity}"/>
+                                    <form:input path="quantity" id="quantityInputElement" pattern="^\d{0,5}$" title="Wpisz liczbę całkowitą od 1 do 99 999" class="text-right form-control-sm" style="max-width: 120px" readonly="false" value="${transItem.quantity}"/>
                                     <form:errors path="quantity" class="text-danger"/>
                                 </td>
                                 <td class="text-right">

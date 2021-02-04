@@ -27,7 +27,7 @@
                     </div>
                     <div class="form-group mx-2 flex-grow-1">
                         <label for="firmName">Nazwa:</label>
-                        <form:input path="firmName" id="firmName" class="form-control" disabled="${disabledParam}"/>
+                        <form:input path="firmName" id="firmName" class="form-control" disabled="${disabledParam}" autofocus="true"/>
                         <form:errors path="firmName" class="text-danger"/>
                     </div>
                 </div>

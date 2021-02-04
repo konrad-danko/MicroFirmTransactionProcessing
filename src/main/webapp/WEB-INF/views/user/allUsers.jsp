@@ -26,7 +26,7 @@
             <table class="table table-bordered table-hover table-sm shadow-lg">
                 <thead class="bg-primary text-white">
                 <tr>
-                    <th>Id</th>
+                    <th class="text-right">Id</th>
                     <th>LoginName</th>
                     <th>Imię</th>
                     <th>Nazwisko</th>
@@ -35,7 +35,7 @@
                 <tbody>
                 <c:forEach items="${allUsers}" var="user">
                     <tr>
-                        <td>${user.id}</td>
+                        <td class="text-right">${user.id}</td>
                         <td><a href="/user/showUser/${user.id}">${user.loginName}</a></td>
                         <td>${user.firstName}</td>
                         <td>${user.lastName}</td>

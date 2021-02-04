@@ -2,9 +2,11 @@ package pl.coderslab.MicroFirm.model;
 
 import org.hibernate.validator.constraints.pl.NIP;
 import org.hibernate.validator.constraints.pl.REGON;
+import pl.coderslab.MicroFirm.validator.PostCode;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @Entity
@@ -21,7 +23,7 @@ public class FirmData {
     private String firmName;
 
     @Column(nullable = false)
-    @Size(min=6, max = 6, message = "Wpisz kod pocztowy w formacie XX-XXX")
+    @PostCode(message = "Wpisz kod pocztowy w formacie XX-XXX")
     private String firmPostCode;
 
     @Column(nullable = false)
@@ -54,7 +56,7 @@ public class FirmData {
     private String firmBankName;
 
     @Column(nullable = false)
-    @Size(min=32, max = 32, message = "Wpisz nr w formacie XX XXXX XXXX XXXX XXXX XXXX XXXX")
+    @Pattern(regexp = "^\\d{2}( \\d{4}){6}$", message = "Wpisz nr w formacie XX XXXX XXXX XXXX XXXX XXXX XXXX")
     private String firmBankAccount;
 
     public Long getId() {

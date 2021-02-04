@@ -26,7 +26,7 @@
             <table class="table table-bordered table-hover table-sm shadow-lg">
                 <thead class="bg-primary text-white">
                 <tr>
-                    <th>Id</th>
+                    <th class="text-right">Id</th>
                     <th>Nazwa</th>
                     <th class="text-center">NIP</th>
                     <th class="text-center">Kod pocztowy</th>
@@ -37,7 +37,7 @@
                 <tbody>
                 <c:forEach items="${allCustomers}" var="customer">
                     <tr>
-                        <td>${customer.id}</td>
+                        <td class="text-right">${customer.id}</td>
                         <td><a href="/customer/showCustomer/${customer.id}">${customer.customerName}</a></td>
                         <td class="text-center">${customer.customerNIP}</td>
                         <td class="text-center">${customer.customerPostCode}</td>
