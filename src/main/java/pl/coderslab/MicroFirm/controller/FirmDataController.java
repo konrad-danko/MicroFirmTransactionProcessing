@@ -13,8 +13,11 @@ import javax.validation.Valid;
 @RequestMapping(path = "/firmData")
 public class FirmDataController {
     private final FirmDataRepository firmDataRepository;
-    public FirmDataController(FirmDataRepository firmDataRepository) {
+    private final DisplayParams displayParams;
+    public FirmDataController(FirmDataRepository firmDataRepository,
+                              DisplayParams displayParams) {
         this.firmDataRepository = firmDataRepository;
+        this.displayParams = displayParams;
     }
 
     //show FirmData
@@ -25,9 +28,7 @@ public class FirmDataController {
         }
         model.addAttribute("firmData", firmDataRepository.findFirstByIdGreaterThan(0));
         model.addAttribute("headerMessage", "Dane Firmy");
-        model.addAttribute("disabledParam", "true");
-        model.addAttribute("submitBtnVisibleParam", "invisible");
-        model.addAttribute("editBtnVisibleParam", "visible");
+        displayParams.setShowParams(model);
         return "/firmData/formFirmData";
     }
 
@@ -36,18 +37,14 @@ public class FirmDataController {
     public String initiateAddFirmData(Model model) {
         model.addAttribute("firmData", new FirmData());
         model.addAttribute("headerMessage", "Wpisz dane Firmy");
-        model.addAttribute("disabledParam", "false");
-        model.addAttribute("submitBtnVisibleParam", "visible");
-        model.addAttribute("editBtnVisibleParam", "invisible");
+        displayParams.setAddEditParams(model);
         return "/firmData/formFirmData";
     }
     @PostMapping(path = "/addFirmData")
     public String processAddFirmData(@ModelAttribute @Valid FirmData firmData, BindingResult result, Model model) {
         if (result.hasErrors()) {
             model.addAttribute("headerMessage", "Wpisz dane Firmy");
-            model.addAttribute("disabledParam", "false");
-            model.addAttribute("submitBtnVisibleParam", "visible");
-            model.addAttribute("editBtnVisibleParam", "invisible");
+            displayParams.setAddEditParams(model);
             return "/firmData/formFirmData";
         }
         firmDataRepository.save(firmData);
@@ -59,18 +56,14 @@ public class FirmDataController {
     public String initiateEditFirmData(Model model, @PathVariable long id) {
         model.addAttribute("firmData", firmDataRepository.findById(id).orElse(null));
         model.addAttribute("headerMessage", "Edytuj dane Firmy");
-        model.addAttribute("disabledParam", "false");
-        model.addAttribute("submitBtnVisibleParam", "visible");
-        model.addAttribute("editBtnVisibleParam", "invisible");
+        displayParams.setAddEditParams(model);
         return "/firmData/formFirmData";
     }
     @PostMapping(path = "/editFirmData/{id}")
     public String processEditFirmData(@ModelAttribute @Valid FirmData firmData, BindingResult result, Model model) {
         if (result.hasErrors()) {
             model.addAttribute("headerMessage", "Edytuj dane Firmy");
-            model.addAttribute("disabledParam", "false");
-            model.addAttribute("submitBtnVisibleParam", "visible");
-            model.addAttribute("editBtnVisibleParam", "invisible");
+            displayParams.setAddEditParams(model);
             return "/firmData/formFirmData";
         }
         firmDataRepository.save(firmData);
