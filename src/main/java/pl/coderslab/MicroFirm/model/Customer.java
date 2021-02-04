@@ -24,6 +24,7 @@ public class Customer {
 
     @Column(nullable = false)
     @PostCode(message = "Wpisz kod pocztowy w formacie XX-XXX")
+    @NotBlank(message = "Pole nie może być puste")
     private String customerPostCode;
 
     @Column(nullable = false)
