@@ -11,6 +11,9 @@ import java.util.Optional;
 
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
 
+    List<Transaction> findAllByCustomer_Id(long id);
+
+
     String sqlQueryGetTransactionWithMostRecentInvoiceNo = "select * from transactions\n" +
             "where invoice_no is not null\n" +
             "and transaction_date>= ?1\n" +
@@ -20,7 +23,6 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
     @Query(value = sqlQueryGetTransactionWithMostRecentInvoiceNo, nativeQuery = true)
     Optional<Transaction> getTransactionWithMostRecentInvoiceNo(LocalDate startDate, LocalDate endDate);
 
-    List<Transaction> findAllByCustomer_Id(long id);
 
     String sqlQueryAllWithGivenUser = "select * from transactions where\n" +
             "created_by_user_id = ?1 or\n" +
@@ -29,4 +31,9 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
     List<Transaction> findAllWithGivenUser(User user);
 
 
+    String sqlQueryGetMostRecent10Transactions = "select * from transactions\n" +
+            "order by id desc\n" +
+            "limit 10";
+    @Query(value = sqlQueryGetMostRecent10Transactions, nativeQuery = true)
+    List<Transaction> getMostRecent10Transactions();
 }
