@@ -1,5 +1,7 @@
 package pl.coderslab.MicroFirm.model;
 
+import pl.coderslab.MicroFirm.validator.UniqueUser;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -16,6 +18,7 @@ public class User {
     @Column(nullable = false, unique = true)
     @NotBlank(message = "Pole nie może być puste")
     @Size(max = 20, message = "Dopuszczalna ilość znaków wynosi 20")
+    @UniqueUser(message = "Ten 'LoginName' jest już przypisany do innego użytkownika")
     private String loginName;
 
     @Column(nullable = false)

@@ -11,7 +11,10 @@ import pl.coderslab.MicroFirm.repository.ProductRepository;
 import pl.coderslab.MicroFirm.repository.TransactionRepository;
 import pl.coderslab.MicroFirm.repository.UserRepository;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @RequestMapping(path = "/user")
@@ -56,7 +59,8 @@ public class UserController {
 
     //add a user
     @GetMapping(path = "/addUser")
-    public String initiateAddUser(Model model) {
+    public String initiateAddUser(Model model,
+                                  HttpServletRequest request) {
         User user = new User();
         user.setPassword("password");
         model.addAttribute("user", user);
@@ -65,6 +69,11 @@ public class UserController {
         model.addAttribute("submitBtnVisibleParam", "visible");
         model.addAttribute("editBtnVisibleParam", "invisible");
         model.addAttribute("delBtnVisibleParam", "invisible");
+
+        HttpSession session = request.getSession();
+        List<User> userList = userRepository.findAll();
+        session.setAttribute("userList", userList);
+
         return "/user/formUser";
     }
     @PostMapping(path = "/addUser")
@@ -85,13 +94,23 @@ public class UserController {
 
     //edit a user
     @GetMapping(path = "/editUser/{id}")
-    public String initiateEditUser(Model model, @PathVariable long id) {
-        model.addAttribute("user", userRepository.findById(id).orElse(null));
+    public String initiateEditUser(Model model,
+                                   @PathVariable long id,
+                                   HttpServletRequest request) {
+        User user = userRepository.findById(id).orElse(null);
+        model.addAttribute("user", user);
         model.addAttribute("headerMessage", "Edytuj dane użytkownika");
         model.addAttribute("disabledParam", "false");
         model.addAttribute("submitBtnVisibleParam", "visible");
         model.addAttribute("editBtnVisibleParam", "invisible");
         model.addAttribute("delBtnVisibleParam", "invisible");
+
+        HttpSession session = request.getSession();
+        List<User> userList = userRepository.findAll();
+        session.setAttribute("userList", userList);
+        String editedLoginName = user.getLoginName();
+        session.setAttribute("editedLoginName", editedLoginName);
+
         return "/user/formUser";
     }
     @PostMapping(path = "/editUser/{id}")
