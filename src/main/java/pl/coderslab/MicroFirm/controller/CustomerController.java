@@ -21,9 +21,13 @@ public class CustomerController {
 
     private final CustomerRepository customerRepository;
     private final TransactionRepository transactionRepository;
-    public CustomerController(CustomerRepository customerRepository, TransactionRepository transactionRepository) {
+    private final DisplayParams displayParams;
+    public CustomerController(CustomerRepository customerRepository,
+                              TransactionRepository transactionRepository,
+                              DisplayParams displayParams) {
         this.customerRepository = customerRepository;
         this.transactionRepository = transactionRepository;
+        this.displayParams = displayParams;
     }
 
     private User getLoggedUser(HttpServletRequest request){
@@ -56,10 +60,7 @@ public class CustomerController {
         setFormattedCreatedAndUpdatedAsModelAttributes(customer, model);
         model.addAttribute("customer", customer);
         model.addAttribute("headerMessage", "Dane klienta");
-        model.addAttribute("disabledParam", "true");
-        model.addAttribute("submitBtnVisibleParam", "invisible");
-        model.addAttribute("editBtnVisibleParam", "visible");
-        model.addAttribute("delBtnVisibleParam", "visible");
+        displayParams.setShowParams(model);
         return "/customer/formCustomer";
     }
 
@@ -69,10 +70,7 @@ public class CustomerController {
                                       HttpServletRequest request) {
         model.addAttribute("customer", new Customer());
         model.addAttribute("headerMessage", "Dodaj nowego klienta");
-        model.addAttribute("disabledParam", "false");
-        model.addAttribute("submitBtnVisibleParam", "visible");
-        model.addAttribute("editBtnVisibleParam", "invisible");
-        model.addAttribute("delBtnVisibleParam", "invisible");
+        displayParams.setAddEditParams(model);
 
         HttpSession session = request.getSession();
         List<Customer> customerList = customerRepository.findAll();
@@ -87,10 +85,7 @@ public class CustomerController {
                                      HttpServletRequest request) {
         if (result.hasErrors()) {
             model.addAttribute("headerMessage", "Dodaj nowego klienta");
-            model.addAttribute("disabledParam", "false");
-            model.addAttribute("submitBtnVisibleParam", "visible");
-            model.addAttribute("editBtnVisibleParam", "invisible");
-            model.addAttribute("delBtnVisibleParam", "invisible");
+            displayParams.setAddEditParams(model);
             return "/customer/formCustomer";
         }
         customer.setCreatedByUser(getLoggedUser(request));
@@ -107,10 +102,7 @@ public class CustomerController {
         setFormattedCreatedAndUpdatedAsModelAttributes(customer, model);
         model.addAttribute("customer", customer);
         model.addAttribute("headerMessage", "Edytuj dane klienta");
-        model.addAttribute("disabledParam", "false");
-        model.addAttribute("submitBtnVisibleParam", "visible");
-        model.addAttribute("editBtnVisibleParam", "invisible");
-        model.addAttribute("delBtnVisibleParam", "invisible");
+        displayParams.setAddEditParams(model);
 
         HttpSession session = request.getSession();
         List<Customer> customerList = customerRepository.findAll();
@@ -128,10 +120,7 @@ public class CustomerController {
         if (result.hasErrors()) {
             setFormattedCreatedAndUpdatedAsModelAttributes(customer, model);
             model.addAttribute("headerMessage", "Edytuj dane klienta");
-            model.addAttribute("disabledParam", "false");
-            model.addAttribute("submitBtnVisibleParam", "visible");
-            model.addAttribute("editBtnVisibleParam", "invisible");
-            model.addAttribute("delBtnVisibleParam", "invisible");
+            displayParams.setAddEditParams(model);
             return "/customer/formCustomer";
         }
         customer.setUpdatedByUser(getLoggedUser(request));
@@ -149,10 +138,7 @@ public class CustomerController {
         setFormattedCreatedAndUpdatedAsModelAttributes(customer, model);
         model.addAttribute("customer", customer);
         model.addAttribute("headerMessage", "Potwierdź usunięcie danych klienta");
-        model.addAttribute("disabledParam", "true");
-        model.addAttribute("submitBtnVisibleParam", "visible");
-        model.addAttribute("editBtnVisibleParam", "invisible");
-        model.addAttribute("delBtnVisibleParam", "invisible");
+        displayParams.setDelParams(model);
         return "/customer/formCustomer";
     }
     @PostMapping(path = "/deleteCustomer/{id}")
