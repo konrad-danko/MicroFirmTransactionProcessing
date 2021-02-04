@@ -24,14 +24,17 @@ public class UserController {
     private final CustomerRepository customerRepository;
     private final ProductRepository productRepository;
     private final TransactionRepository transactionRepository;
+    private final DisplayParams displayParams;
     public UserController(UserRepository userRepository,
                           CustomerRepository customerRepository,
                           ProductRepository productRepository,
-                          TransactionRepository transactionRepository) {
+                          TransactionRepository transactionRepository,
+                          DisplayParams displayParams) {
         this.userRepository = userRepository;
         this.customerRepository = customerRepository;
         this.productRepository = productRepository;
         this.transactionRepository = transactionRepository;
+        this.displayParams = displayParams;
     }
 
     //metoda hashująca hasło:
@@ -50,10 +53,7 @@ public class UserController {
     public String showUser(Model model, @PathVariable long id) {
         model.addAttribute("user", userRepository.findById(id).orElse(null));
         model.addAttribute("headerMessage", "Dane użytkownika");
-        model.addAttribute("disabledParam", "true");
-        model.addAttribute("submitBtnVisibleParam", "invisible");
-        model.addAttribute("editBtnVisibleParam", "visible");
-        model.addAttribute("delBtnVisibleParam", "visible");
+        displayParams.setShowParams(model);
         return "/user/formUser";
     }
 
@@ -65,10 +65,7 @@ public class UserController {
         user.setPassword("password");
         model.addAttribute("user", user);
         model.addAttribute("headerMessage", "Dodaj nowego użytkownika");
-        model.addAttribute("disabledParam", "false");
-        model.addAttribute("submitBtnVisibleParam", "visible");
-        model.addAttribute("editBtnVisibleParam", "invisible");
-        model.addAttribute("delBtnVisibleParam", "invisible");
+        displayParams.setAddEditParams(model);
 
         HttpSession session = request.getSession();
         List<User> userList = userRepository.findAll();
@@ -80,16 +77,13 @@ public class UserController {
     public String processAddUser(@ModelAttribute @Valid User user, BindingResult result, Model model) {
         if (result.hasErrors()) {
             model.addAttribute("headerMessage", "Dodaj nowego użytkownika");
-            model.addAttribute("disabledParam", "false");
-            model.addAttribute("submitBtnVisibleParam", "visible");
-            model.addAttribute("editBtnVisibleParam", "invisible");
-            model.addAttribute("delBtnVisibleParam", "invisible");
+            displayParams.setAddEditParams(model);
             return "/user/formUser";
         }
         //przed zapisem do bazy hashujemy "password" jako hasło tymczasowe
         user.setPassword(hashPassword("password"));
         userRepository.save(user);
-        return "redirect:/user/showAllUsers";
+        return "redirect:/user/showUser/"+user.getId();
     }
 
     //edit a user
@@ -100,10 +94,7 @@ public class UserController {
         User user = userRepository.findById(id).orElse(null);
         model.addAttribute("user", user);
         model.addAttribute("headerMessage", "Edytuj dane użytkownika");
-        model.addAttribute("disabledParam", "false");
-        model.addAttribute("submitBtnVisibleParam", "visible");
-        model.addAttribute("editBtnVisibleParam", "invisible");
-        model.addAttribute("delBtnVisibleParam", "invisible");
+        displayParams.setAddEditParams(model);
 
         HttpSession session = request.getSession();
         List<User> userList = userRepository.findAll();
@@ -117,14 +108,11 @@ public class UserController {
     public String processEditUser(@ModelAttribute @Valid User user, BindingResult result, Model model) {
         if (result.hasErrors()) {
             model.addAttribute("headerMessage", "Edytuj dane użytkownika");
-            model.addAttribute("disabledParam", "false");
-            model.addAttribute("submitBtnVisibleParam", "visible");
-            model.addAttribute("editBtnVisibleParam", "invisible");
-            model.addAttribute("delBtnVisibleParam", "invisible");
+            displayParams.setAddEditParams(model);
             return "/user/formUser";
         }
         userRepository.save(user);
-        return "redirect:/user/showAllUsers";
+        return "redirect:/user/showUser/"+user.getId();
     }
 
     //delete a user
@@ -132,10 +120,7 @@ public class UserController {
     public String initiateDeleteUser(Model model, @PathVariable long id) {
         model.addAttribute("user", userRepository.findById(id).orElse(null));
         model.addAttribute("headerMessage", "Potwierdź usunięcie danych użytkownika");
-        model.addAttribute("disabledParam", "true");
-        model.addAttribute("submitBtnVisibleParam", "visible");
-        model.addAttribute("editBtnVisibleParam", "invisible");
-        model.addAttribute("delBtnVisibleParam", "invisible");
+        displayParams.setDelParams(model);
         return "/user/formUser";
     }
     @PostMapping(path = "/deleteUser/{id}")
