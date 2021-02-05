@@ -5,7 +5,7 @@
 
 <html>
 <head>
-    <title>Home Page</title>
+    <title>Reports</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -15,22 +15,31 @@
 </head>
 <body>
 <div class="container-fluid">
-    <%@ include file="header.jsp" %>
+    <%@include file="../header.jsp"%>
 
-    <div class="d-flex justify-content-center">
-        <div class="border rounded shadow-lg bg-light text-dark">
-            <h2 class="m-3 text-center">${firmData.firmName}</h2>
-        </div>
-    </div>
-    <br>
-    <br>
-
-    <div class="d-flex justify-content-center">
-        <div style="width:90%">
-            <div class="d-flex justify-content-start">
-                <h3 class="ml-3">Najnowsze transakcje</h3>
+    <div class="d-flex justify-content-start">
+        <form method="post" action="/report/showInvoicedTransactionsFromGivenPeriod" class="d-flex border rounded shadow-lg">
+            <div class="d-flex mt-2">
+                <div class="mx-4 my-auto">
+                    <h2>Raport "Transakcje fakturowane"</h2>
+                </div>
+                <div class="form-group mx-3">
+                    <label for="dateFrom">Data transakcji od:</label>
+                    <input type="date" id="dateFrom" name="dateFrom" value="${dateFrom}" class="form-control" required>
+                </div>
+                <div class="form-group mx-3">
+                    <label for="dateTo">Data transakcji do:</label>
+                    <input type="date" id="dateTo" name="dateTo" value="${dateTo}" class="form-control" required>
+                </div>
+                <div class="mx-3 mb-3 mt-auto">
+                    <button type="submit" class="btn btn-info font-weight-bold">Pokaż transakcje</button>
+                </div>
             </div>
+        </form>
+    </div>
 
+    <div class="d-flex justify-content-start">
+        <div style="width:100%">
             <table class="table table-bordered table-hover table-sm shadow-lg">
                 <thead class="bg-primary text-white">
                 <tr>
@@ -45,7 +54,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <c:forEach items="${mostRecent10Transactions}" var="transaction">
+                <c:forEach items="${transactionList}" var="transaction">
                     <tr>
                         <td class="text-right"><a href="/transaction/showTransaction/${transaction.id}">${transaction.id}</a></td>
                         <td>${transaction.customer.getCustomerName()}</td>
@@ -62,16 +71,18 @@
                     </tr>
                 </c:forEach>
                 </tbody>
+                <tfoot>
+                <tr class="font-weight-bold" style="background-color: #e9ecef">
+                    <td class="text-right" colspan="4">Razem:</td>
+                    <td class="text-right">${totalNetAmount}</td>
+                    <td class="text-right">${totalVatAmount}</td>
+                    <td class="text-right">${totalGrossAmount}</td>
+                    <td></td>
+                </tr>
+                </tfoot>
             </table>
         </div>
     </div>
-    
-
-
-
-
-
-
 </div>
 </body>
 </html>

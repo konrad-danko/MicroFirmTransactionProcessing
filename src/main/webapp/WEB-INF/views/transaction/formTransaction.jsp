@@ -122,7 +122,7 @@
                             <tr>
                                 <th class="text-center">Sposób zapłaty</th>
                                 <th class="text-center">Data płatności</th>
-                                <th class="text-center">Kwota do zapłaty (słownie)</th>
+                                <th class="text-center">Kwota brutto (słownie)</th>
                             </tr>
                             </thead>
                             <tbody>

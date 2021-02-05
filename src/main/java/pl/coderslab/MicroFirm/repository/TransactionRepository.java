@@ -13,7 +13,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 
     List<Transaction> findAllByCustomer_Id(long id);
 
-
+    
     String sqlQueryGetTransactionWithMostRecentInvoiceNo = "select * from transactions\n" +
             "where invoice_no is not null\n" +
             "and transaction_date>= ?1\n" +
@@ -36,4 +36,13 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
             "limit 10";
     @Query(value = sqlQueryGetMostRecent10Transactions, nativeQuery = true)
     List<Transaction> getMostRecent10Transactions();
+
+
+    String sqlQueryGetInvoicedTransactionsFromGivenPeriod = "select * from transactions\n" +
+            "where invoice_no is not null\n" +
+            "and transaction_date >= ?1\n" +
+            "and transaction_date <= ?2\n" +
+            "order by id asc";
+    @Query(value = sqlQueryGetInvoicedTransactionsFromGivenPeriod, nativeQuery = true)
+    List<Transaction> getInvoicedTransactionsFromGivenPeriod(LocalDate startDate, LocalDate endDate);
 }
