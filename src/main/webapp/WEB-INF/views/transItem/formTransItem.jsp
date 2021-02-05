@@ -113,10 +113,12 @@
                                 </td>
                                 <td class="text-right">
                                     <form:input path="quantity" id="quantityInputElement" pattern="^\d{0,5}$" title="Wpisz liczbę całkowitą od 1 do 99 999" class="text-right form-control-sm" style="max-width: 120px" readonly="false" value="${transItem.quantity}"/>
+                                    <br>
                                     <form:errors path="quantity" class="text-danger"/>
                                 </td>
                                 <td class="text-right">
                                     <form:input path="netPricePer1000" id="netPricePer1000InputElement" value="${transItem.netPricePer1000}" class="text-right form-control-sm" style="background-color: #e9ecef; max-width: 120px;" readonly="true"/>
+                                    <br>
                                     <form:errors path="netPricePer1000" class="text-danger"/>
                                 </td>
                                 <td class="text-right">

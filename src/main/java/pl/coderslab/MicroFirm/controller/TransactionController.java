@@ -31,14 +31,17 @@ public class TransactionController {
     private final TransItemRepository transItemRepository;
     private final FirmDataRepository firmDataRepository;
     private final CustomerRepository customerRepository;
+    private final DisplayParams displayParams;
     public TransactionController(TransactionRepository transactionRepository,
                                  TransItemRepository transItemRepository,
                                  FirmDataRepository firmDataRepository,
-                                 CustomerRepository customerRepository) {
+                                 CustomerRepository customerRepository,
+                                 DisplayParams displayParams) {
         this.transactionRepository = transactionRepository;
         this.transItemRepository = transItemRepository;
         this.firmDataRepository = firmDataRepository;
         this.customerRepository = customerRepository;
+        this.displayParams = displayParams;
     }
 
     private User getLoggedUser(HttpServletRequest request){
@@ -96,11 +99,7 @@ public class TransactionController {
         model.addAttribute("transaction", transaction);
         model.addAttribute("allTransItems", transItemRepository.findAllByTransaction_Id(id));
         model.addAttribute("headerMessage", "Szczegóły transakcji");
-        model.addAttribute("disabledParam", "true");
-        model.addAttribute("addTransItemBtnVisibleParam", "visible");
-        model.addAttribute("submitBtnVisibleParam", "invisible");
-        model.addAttribute("editBtnVisibleParam", "visible");
-        model.addAttribute("delBtnVisibleParam", "visible");
+        displayParams.setShowParams(model);
         return "/transaction/formTransaction";
     }
 
@@ -121,11 +120,7 @@ public class TransactionController {
         transaction.setPaymentAmountInWords("-- zero zł. zero zero gr. --");
         model.addAttribute("transaction", transaction);
         model.addAttribute("headerMessage", "Dodaj nową transakcję");
-        model.addAttribute("disabledParam", "false");
-        model.addAttribute("addTransItemBtnVisibleParam", "invisible");
-        model.addAttribute("submitBtnVisibleParam", "visible");
-        model.addAttribute("editBtnVisibleParam", "invisible");
-        model.addAttribute("delBtnVisibleParam", "invisible");
+        displayParams.setAddEditParams(model);
         return "/transaction/formTransaction";
     }
     @PostMapping(path = "/addTransaction")
@@ -135,11 +130,7 @@ public class TransactionController {
                                         HttpServletRequest request) {
         if (result.hasErrors()) {
             model.addAttribute("headerMessage", "Dodaj nową transakcję");
-            model.addAttribute("disabledParam", "false");
-            model.addAttribute("addTransItemBtnVisibleParam", "invisible");
-            model.addAttribute("submitBtnVisibleParam", "visible");
-            model.addAttribute("editBtnVisibleParam", "invisible");
-            model.addAttribute("delBtnVisibleParam", "invisible");
+            displayParams.setAddEditParams(model);
             return "/transaction/formTransaction";
         }
         transaction.setCreatedByUser(getLoggedUser(request));
@@ -163,11 +154,7 @@ public class TransactionController {
         model.addAttribute("transaction", transaction);
         model.addAttribute("allTransItems", transItemRepository.findAllByTransaction_Id(id));
         model.addAttribute("headerMessage", "Edytuj dane transakcji");
-        model.addAttribute("disabledParam", "false");
-        model.addAttribute("addTransItemBtnVisibleParam", "invisible");
-        model.addAttribute("submitBtnVisibleParam", "visible");
-        model.addAttribute("editBtnVisibleParam", "invisible");
-        model.addAttribute("delBtnVisibleParam", "invisible");
+        displayParams.setAddEditParams(model);
         return "/transaction/formTransaction";
     }
     @PostMapping(path = "/editTransaction/{id}")
@@ -180,11 +167,7 @@ public class TransactionController {
             setFormattedCreatedAndUpdatedAsModelAttributes(transaction, model);
             model.addAttribute("allTransItems", transItemRepository.findAllByTransaction_Id(id));
             model.addAttribute("headerMessage", "Edytuj dane transakcji");
-            model.addAttribute("disabledParam", "false");
-            model.addAttribute("addTransItemBtnVisibleParam", "invisible");
-            model.addAttribute("submitBtnVisibleParam", "visible");
-            model.addAttribute("editBtnVisibleParam", "invisible");
-            model.addAttribute("delBtnVisibleParam", "invisible");
+            displayParams.setAddEditParams(model);
             return "/transaction/formTransaction";
         }
         transaction.setUpdatedByUser(getLoggedUser(request));
@@ -208,11 +191,7 @@ public class TransactionController {
         model.addAttribute("transaction", transaction);
         model.addAttribute("allTransItems", transItemRepository.findAllByTransaction_Id(id));
         model.addAttribute("headerMessage", "Potwierdź usunięcie transakcji");
-        model.addAttribute("disabledParam", "true");
-        model.addAttribute("addTransItemBtnVisibleParam", "invisible");
-        model.addAttribute("submitBtnVisibleParam", "visible");
-        model.addAttribute("editBtnVisibleParam", "invisible");
-        model.addAttribute("delBtnVisibleParam", "invisible");
+        displayParams.setDelParams(model);
         return "/transaction/formTransaction";
     }
     @PostMapping(path = "/deleteTransaction/{id}")
