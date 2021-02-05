@@ -20,9 +20,13 @@ public class ProductController {
 
     private final ProductRepository productRepository;
     private final TransItemRepository transItemRepository;
-    public ProductController(ProductRepository productRepository, TransItemRepository transItemRepository) {
+    private final DisplayParams displayParams;
+    public ProductController(ProductRepository productRepository,
+                             TransItemRepository transItemRepository,
+                             DisplayParams displayParams) {
         this.productRepository = productRepository;
         this.transItemRepository = transItemRepository;
+        this.displayParams = displayParams;
     }
 
     private User getLoggedUser(HttpServletRequest request){
@@ -55,10 +59,7 @@ public class ProductController {
         setFormattedCreatedAndUpdatedAsModelAttributes(product, model);
         model.addAttribute("product", product);
         model.addAttribute("headerMessage", "Dane produktu");
-        model.addAttribute("disabledParam", "true");
-        model.addAttribute("submitBtnVisibleParam", "invisible");
-        model.addAttribute("editBtnVisibleParam", "visible");
-        model.addAttribute("delBtnVisibleParam", "visible");
+        displayParams.setShowParams(model);
         return "/product/formProduct";
     }
 
@@ -67,20 +68,14 @@ public class ProductController {
     public String initiateAddProduct(Model model) {
         model.addAttribute("product", new Product());
         model.addAttribute("headerMessage", "Dodaj nowy produkt");
-        model.addAttribute("disabledParam", "false");
-        model.addAttribute("submitBtnVisibleParam", "visible");
-        model.addAttribute("editBtnVisibleParam", "invisible");
-        model.addAttribute("delBtnVisibleParam", "invisible");
+        displayParams.setAddEditParams(model);
         return "/product/formProduct";
     }
     @PostMapping(path = "/addProduct")
     public String processAddProduct(@ModelAttribute @Valid Product product, BindingResult result, Model model, HttpServletRequest request) {
         if (result.hasErrors()) {
             model.addAttribute("headerMessage", "Dodaj nowy produkt");
-            model.addAttribute("disabledParam", "false");
-            model.addAttribute("submitBtnVisibleParam", "visible");
-            model.addAttribute("editBtnVisibleParam", "invisible");
-            model.addAttribute("delBtnVisibleParam", "invisible");
+            displayParams.setAddEditParams(model);
             return "/product/formProduct";
         }
         product.setCreatedByUser(getLoggedUser(request));
@@ -95,10 +90,7 @@ public class ProductController {
         setFormattedCreatedAndUpdatedAsModelAttributes(product, model);
         model.addAttribute("product", product);
         model.addAttribute("headerMessage", "Edytuj dane produktu");
-        model.addAttribute("disabledParam", "false");
-        model.addAttribute("submitBtnVisibleParam", "visible");
-        model.addAttribute("editBtnVisibleParam", "invisible");
-        model.addAttribute("delBtnVisibleParam", "invisible");
+        displayParams.setAddEditParams(model);
         return "/product/formProduct";
     }
     @PostMapping(path = "/editProduct/{id}")
@@ -106,10 +98,7 @@ public class ProductController {
         if (result.hasErrors()) {
             setFormattedCreatedAndUpdatedAsModelAttributes(product, model);
             model.addAttribute("headerMessage", "Edytuj dane produktu");
-            model.addAttribute("disabledParam", "false");
-            model.addAttribute("submitBtnVisibleParam", "visible");
-            model.addAttribute("editBtnVisibleParam", "invisible");
-            model.addAttribute("delBtnVisibleParam", "invisible");
+            displayParams.setAddEditParams(model);
             return "/product/formProduct";
         }
         product.setUpdatedByUser(getLoggedUser(request));
@@ -127,10 +116,7 @@ public class ProductController {
         setFormattedCreatedAndUpdatedAsModelAttributes(product, model);
         model.addAttribute("product", product);
         model.addAttribute("headerMessage", "Potwierdź usunięcie produktu");
-        model.addAttribute("disabledParam", "true");
-        model.addAttribute("submitBtnVisibleParam", "visible");
-        model.addAttribute("editBtnVisibleParam", "invisible");
-        model.addAttribute("delBtnVisibleParam", "invisible");
+        displayParams.setDelParams(model);
         return "/product/formProduct";
     }
     @PostMapping(path = "/deleteProduct/{id}")
