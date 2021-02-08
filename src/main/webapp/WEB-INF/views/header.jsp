@@ -35,9 +35,15 @@
         <li class="nav-item">
             <a href="/transaction/showAllTransactions" class="btn btn-info mx-2">Transakcje</a>
         </li>
-        <li class="nav-item">
-            <a href="/report/showAllReports" class="btn btn-info mx-2">Raporty</a>
-        </li>
+        <div class="dropdown mx-2">
+            <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
+                Raporty
+            </button>
+            <div class="dropdown-menu bg-info">
+                <a class="dropdown-item" href="/report/showInvoicedTransactions">Transakcje fakturowane</a>
+                <a class="dropdown-item" href="/report/showUnpaidTransactions">Transakcje niezapłacone</a>
+            </div>
+        </div>
     </ul>
 
     <h3 class="navbar-text mx-2">Micro Firm</h3>
@@ -56,6 +62,10 @@
 <br>
 
 <script>
+    $(document).ready(function(){
+        $(".dropdown-toggle").dropdown();
+    });
+
     $(document).ready(function(){
         $('[data-toggle="tooltipHeader"]').tooltip({title: "<div class='bg-warning text-dark font-weight-bold border border-warning rounded-sm'>&nbspZmień hasło&nbsp</div>", html: true, placement: "left"});
     });

@@ -5,14 +5,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import pl.coderslab.MicroFirm.model.TransItem;
 import pl.coderslab.MicroFirm.model.Transaction;
 import pl.coderslab.MicroFirm.repository.TransactionRepository;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Controller
@@ -24,11 +22,11 @@ public class ReportController {
         this.transactionRepository = transactionRepository;
     }
 
-    @GetMapping(path = "/showAllReports")
+    @GetMapping(path = "/showInvoicedTransactions")
     public String showAllCustomers(Model model) {
         model.addAttribute("dateFrom", LocalDate.now());
         model.addAttribute("dateTo", LocalDate.now());
-        return "/report/allReports";
+        return "/report/invoicedTransactions";
     }
 
     @PostMapping(path = "/showInvoicedTransactionsFromGivenPeriod")
@@ -56,6 +54,22 @@ public class ReportController {
         model.addAttribute("totalVatAmount", totalVatAmount);
         model.addAttribute("totalGrossAmount", totalGrossAmount);
 
-        return "/report/allReports";
+        return "/report/invoicedTransactions";
+    }
+
+    @GetMapping(path = "/showUnpaidTransactions")
+    public String showUnpaidTransactions(Model model){
+        List<Transaction> transactionList = transactionRepository.getUnpaidTransactions();
+        BigDecimal totalAmountPaid = new BigDecimal("0.00");
+        BigDecimal totalGrossAmount = new BigDecimal("0.00");
+        for(Transaction transaction : transactionList){
+            totalAmountPaid = totalAmountPaid.add(transaction.getAmountPaid());
+            totalGrossAmount = totalGrossAmount.add(transaction.getTotalGrossAmount());
+        }
+        model.addAttribute("totalAmountPaid", totalAmountPaid);
+        model.addAttribute("totalGrossAmount", totalGrossAmount);
+        model.addAttribute("transactionList", transactionList);
+        model.addAttribute("today", LocalDate.now());
+        return "/report/unpaidTransactions";
     }
 }

@@ -45,4 +45,11 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
             "order by id asc";
     @Query(value = sqlQueryGetInvoicedTransactionsFromGivenPeriod, nativeQuery = true)
     List<Transaction> getInvoicedTransactionsFromGivenPeriod(LocalDate startDate, LocalDate endDate);
+
+
+    String sqlQueryGetUnpaidTransactions = "select * from transactions where\n" +
+            "amount_paid < transactions.total_gross_amount\n" +
+            "order by payment_due_date asc";
+    @Query(value = sqlQueryGetUnpaidTransactions, nativeQuery = true)
+    List<Transaction> getUnpaidTransactions();
 }
