@@ -14,4 +14,10 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "updated_by_user_id = ?1";
     @Query(value = sqlQueryAllWithGivenUser, nativeQuery = true)
     List<Product> findAllWithGivenUser(User user);
+
+
+    String sqlQueryFindAllOrderedByName = "select * from products\n" +
+            "order by product_name";
+    @Query(value = sqlQueryFindAllOrderedByName, nativeQuery = true)
+    List<Product> findAllOrderedByName();
 }

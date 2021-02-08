@@ -49,7 +49,7 @@ public class CustomerController {
 
     @GetMapping(path = "/showAllCustomers")
     public String showAllCustomers(Model model) {
-        model.addAttribute("allCustomers", customerRepository.findAll());
+        model.addAttribute("allCustomers", customerRepository.findAllOrderedByName());
         return "/customer/allCustomers";
     }
 

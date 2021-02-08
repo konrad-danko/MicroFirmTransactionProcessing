@@ -48,7 +48,7 @@ public class ProductController {
 
     @GetMapping(path = "/showAllProducts")
     public String showAllProducts(Model model) {
-        model.addAttribute("allProducts", productRepository.findAll());
+        model.addAttribute("allProducts", productRepository.findAllOrderedByName());
         return "/product/allProducts";
     }
 

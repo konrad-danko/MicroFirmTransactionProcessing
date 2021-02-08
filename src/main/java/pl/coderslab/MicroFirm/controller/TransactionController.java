@@ -77,7 +77,7 @@ public class TransactionController {
 
     @ModelAttribute("allCustomers")
     public List<Customer> getAllCustomers(){
-        return customerRepository.findAll();
+        return customerRepository.findAllOrderedByName();
     }
 
     @ModelAttribute("allPaymentTypes")

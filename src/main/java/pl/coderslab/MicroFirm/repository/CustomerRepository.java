@@ -14,4 +14,9 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
             "updated_by_user_id = ?1";
     @Query(value = sqlQueryAllWithGivenUser, nativeQuery = true)
     List<Customer> findAllWithGivenUser(User user);
+
+    String sqlQueryFindAllOrderedByName = "select * from customers\n" +
+            "order by customer_name";
+    @Query(value = sqlQueryFindAllOrderedByName, nativeQuery = true)
+    List<Customer> findAllOrderedByName();
 }

@@ -26,7 +26,7 @@
             <table class="table table-bordered table-hover table-sm shadow-lg">
                 <thead class="bg-primary text-white">
                 <tr>
-                    <th class="text-right">Id</th>
+                    <%--<th class="text-right">Id</th>--%>
                     <th>Nazwa</th>
                     <th class="text-right">Netto</th>
                     <th class="text-right">VAT (%)</th>
@@ -36,7 +36,7 @@
                 <tbody>
                 <c:forEach items="${allProducts}" var="product">
                     <tr>
-                        <td class="text-right">${product.id}</td>
+                        <%--<td class="text-right">${product.id}</td>--%>
                         <td><a href="/product/showProduct/${product.id}">${product.productName}</a></td>
                         <td class="text-right">${product.netPricePer1000}</td>
                         <td class="text-right">${product.vatRate}</td>

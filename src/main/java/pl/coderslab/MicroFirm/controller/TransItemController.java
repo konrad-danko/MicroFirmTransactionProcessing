@@ -112,7 +112,7 @@ public class TransItemController {
 
     @ModelAttribute("allProducts")
     public List<Product> getAllProducts(){
-        return productRepository.findAll();
+        return productRepository.findAllOrderedByName();
     }
 
     //add a transItem
