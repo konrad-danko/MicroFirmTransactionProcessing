@@ -104,6 +104,9 @@ public class TransItemController {
         transaction.setTotalVatAmount(totalVatAmount);
         transaction.setTotalGrossAmount(totalGrossAmount);
         transaction.setPaymentAmountInWords(getAmountInWords(totalGrossAmount));
+        if ("GZ".equals(transaction.getPaymentType().toString())){
+            transaction.setAmountPaid(totalGrossAmount);
+        }
         transactionRepository.save(transaction);
     }
 

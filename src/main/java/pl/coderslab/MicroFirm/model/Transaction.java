@@ -1,8 +1,7 @@
 package pl.coderslab.MicroFirm.model;
 
 import javax.persistence.*;
-import javax.validation.constraints.FutureOrPresent;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -61,6 +60,12 @@ public class Transaction {
 
     @Column(nullable = false)
     private BigDecimal totalGrossAmount; //autoupdated during add operation
+
+    @Column(nullable = false, scale=2)
+    @NotNull(message = "Pole nie może być puste")
+    @Digits(integer=5, fraction=2, message = "Wpisz liczbę poniżej 100 000 np: '123.45' - jako separator dziesiętny użyj kropki")
+    @PositiveOrZero(message = "Liczba nie może być mniejsza od zera")
+    private BigDecimal amountPaid;
 
     @Column(nullable = false)
     private String paymentAmountInWords; //autoupdated during add operation
@@ -170,6 +175,13 @@ public class Transaction {
         this.totalGrossAmount = totalGrossAmount;
     }
 
+    public BigDecimal getAmountPaid() {
+        return amountPaid;
+    }
+    public void setAmountPaid(BigDecimal amountPaid) {
+        this.amountPaid = amountPaid;
+    }
+
     public String getPaymentAmountInWords() {
         return paymentAmountInWords;
     }
@@ -220,6 +232,7 @@ public class Transaction {
                 ", totalNetAmount=" + totalNetAmount +
                 ", totalVatAmount=" + totalVatAmount +
                 ", totalGrossAmount=" + totalGrossAmount +
+                ", amountPaid=" + amountPaid +
                 ", paymentAmountInWords='" + paymentAmountInWords + '\'' +
                 ", createdByUser=" + createdByUser +
                 ", updatedByUser=" + updatedByUser +

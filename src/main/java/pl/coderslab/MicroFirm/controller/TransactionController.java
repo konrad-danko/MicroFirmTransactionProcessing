@@ -117,6 +117,7 @@ public class TransactionController {
         transaction.setTotalNetAmount(new BigDecimal("0.00"));
         transaction.setTotalVatAmount(new BigDecimal("0.00"));
         transaction.setTotalGrossAmount(new BigDecimal("0.00"));
+        transaction.setAmountPaid(new BigDecimal("0.00"));
         transaction.setPaymentAmountInWords("-- zero zł. zero zero gr. --");
         model.addAttribute("transaction", transaction);
         model.addAttribute("headerMessage", "Dodaj nową transakcję");

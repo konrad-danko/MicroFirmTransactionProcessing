@@ -155,6 +155,7 @@
                             <thead class="thead-light">
                             <tr>
                                 <th class="text-center">Sposób zapłaty</th>
+                                <th class="text-center">Wpłacono</th>
                                 <th class="text-center">Data płatności</th>
                                 <th class="text-center">Kwota do zapłaty (słownie)</th>
                             </tr>
@@ -164,6 +165,11 @@
                                 <td>
                                     <div class="border rounded" style="height: 38px; background-color: #e9ecef; width: 199px;">
                                         <div class="mx-2 mt-2">${transaction.paymentType.getDescription()}</div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="border rounded" style="height: 38px; background-color: #e9ecef; width: 227px;">
+                                        <div class="mx-2 mt-2 text-right">${transaction.amountPaid}</div>
                                     </div>
                                 </td>
                                 <td class="align-middle">

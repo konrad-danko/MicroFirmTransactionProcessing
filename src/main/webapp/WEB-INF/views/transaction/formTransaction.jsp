@@ -116,11 +116,14 @@
 
                 <%--Tabelka z detalami płatności--%>
                 <div class="d-flex justify-content-end">
-                    <div class="mx-3" >
+                    <div class="mx-3">
+                        <div id="divSurroundingWarningElement" class="d-flex justify-content-start">
+                        </div>
                         <table class="table table-bordered table-sm">
                             <thead class="thead-light">
                             <tr>
                                 <th class="text-center">Sposób zapłaty</th>
+                                <th class="text-center">Wpłacono</th>
                                 <th class="text-center">Data płatności</th>
                                 <th class="text-center">Kwota brutto (słownie)</th>
                             </tr>
@@ -128,8 +131,12 @@
                             <tbody>
                             <tr>
                                 <td>
-                                    <form:select path="paymentType" items="${allPaymentTypes}" class="form-control" disabled="${disabledParam}" itemLabel="description"  />
+                                    <form:select path="paymentType" id="paymentTypeElement" items="${allPaymentTypes}" class="form-control" disabled="${disabledParam}" itemLabel="description"  />
                                     <form:errors path="paymentType" class="text-danger"/>
+                                </td>
+                                <td>
+                                    <form:input path="amountPaid" id="amountPaid" pattern="^\d{0,5}(\.\d{0,2})?$" title="Wpisz liczbę poniżej 100 000 np: '123.45' - jako separator dziesiętny użyj kropki" class="form-control text-right" disabled="${disabledParam}" value="${transaction.amountPaid}"/>
+                                    <form:errors path="amountPaid" class="text-danger"/>
                                 </td>
                                 <td>
                                     <form:input type="date" path="paymentDueDate" class="text-center form-control" disabled="${disabledParam}" value="${transaction.paymentDueDate}"/>
@@ -182,25 +189,36 @@
         </div>
     </div>
 </div>
-
 <script>
     const issueInvoiceCheckboxElement = document.getElementById("issueInvoiceCheckboxElement");
     const invoiceNoDivElement = document.getElementById("invoiceNoDivElement");
+    const paymentTypeElement = document.getElementById("paymentTypeElement");
+    const divSurroundingWarningElement = document.getElementById("divSurroundingWarningElement");
 
-    if (issueInvoiceCheckboxElement.checked){
-        invoiceNoDivElement.classList.remove("d-none");
-    } else {
-        invoiceNoDivElement.classList.add("d-none");
-    }
-
-    issueInvoiceCheckboxElement.addEventListener("click", function (){
+    function modifyInvoiceNoDivElementClassList(event) {
         if (issueInvoiceCheckboxElement.checked){
             invoiceNoDivElement.classList.remove("d-none");
         } else {
             invoiceNoDivElement.classList.add("d-none");
         }
-    });
+    }
+    modifyInvoiceNoDivElementClassList()
+    issueInvoiceCheckboxElement.addEventListener("click", modifyInvoiceNoDivElementClassList);
 
+    paymentTypeElement.addEventListener("change", function (){
+        const divWarningElement = document.createElement("div");
+        const buttonCloseElement = document.createElement("button");
+
+        divWarningElement.classList.add("alert", "alert-danger", "alert-dismissible");
+        divWarningElement.innerText = "Uwaga! Upewnij się, że kwota w rubryce 'Wpłacono' jest poprawna";
+        buttonCloseElement.setAttribute("type", "button");
+        buttonCloseElement.classList.add("close");
+        buttonCloseElement.dataset.dismiss = "alert";
+        buttonCloseElement.innerHTML = "&times;";
+
+        divSurroundingWarningElement.appendChild(divWarningElement);
+        divWarningElement.appendChild(buttonCloseElement);
+    });
 
 </script>
 </body>
