@@ -1,5 +1,5 @@
 # MicroFirmTransactionProcessing
-Final project on Coders Lab Java Developer course.
+Final project on the Java Developer course at Coders Lab IT School.
 
 This web application supports processing of transactions in a micro enterprise and is intended to be used as an internal firm tool.
 
